@@ -25,3 +25,7 @@ docs/.vitepress/cache
 coverage/
 dist/
 styles.css
+
+CLAUDE.local.md
+.claude/settings.local.json
+.cognition/config.local.json

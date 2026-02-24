@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(.windsurf/**)",
+      "Write(.windsurf/**)",
+      "Read(.claude/**)",
+      "Write(.claude/**)"
+    ]
+  }
+}
