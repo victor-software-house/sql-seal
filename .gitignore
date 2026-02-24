@@ -29,3 +29,4 @@ styles.css
 CLAUDE.local.md
 .claude/settings.local.json
 .cognition/config.local.json
+.firecrawl/
