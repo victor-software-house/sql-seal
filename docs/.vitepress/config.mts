@@ -113,16 +113,11 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/h-sphere/sql-seal' },
-      { icon: 'discord', link: 'https://discord.gg/ZMRnFeAWXb' },
-      { icon: 'bluesky', link: 'https://bsky.app/profile/hypersphereblog.bsky.social' },
-      { icon: 'kofi', link: 'https://ko-fi.com/hypersphere' },
-      { icon: 'patreon', link: 'https://www.patreon.com/c/hypersphere' },
-
+      { icon: 'github', link: 'https://github.com/victor-software-house/sql-seal' }
     ],
     footer: {
       message: '',
-      copyright: 'By <a href="https://hypersphere.blog">hypersphere</a>.<br/>Sponsor Me: <a href="https://ko-fi.com/hypersphere">Ko-Fi</a>'
+      copyright: 'Fork of sql-seal by hypersphere'
     }
   },
   markdown: {

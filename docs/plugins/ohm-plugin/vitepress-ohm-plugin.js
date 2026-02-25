@@ -28,7 +28,7 @@ const parser = (sql) => {
         {
             name: 'TEMPLATE',
             singleLine: false,
-            argument: 'handlebarsTemplate'
+            argument: 'nunjucksTemplate'
         }
     ]
 
@@ -253,7 +253,7 @@ function renderDecoratorTree(node, code, lastPos = 0) {
 }
 
 /**
- * Escapes HTML and additionally escapes handlebars/mustache syntax 
+ * Escapes HTML and additionally escapes Nunjucks/Mustache syntax 
  * to prevent Vue from interpreting them as Vue template directives
  */
 function escapeHtml(unsafe) {
@@ -265,7 +265,7 @@ function escapeHtml(unsafe) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
     
-    // Then escape the handlebars/mustache syntax by adding a zero-width space
+    // Then escape the Nunjucks/Mustache syntax by adding a zero-width space
     // between the opening braces to prevent Vue from interpreting them
     escaped = escaped
         .replace(/{{/g, "{&#8203;{")

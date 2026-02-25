@@ -11,7 +11,7 @@ On top of properties current file exposes in the properties, you can also use th
 | @path      | Full path of the file you're editing        | `folder/file.md` |
 | @fileName  | Filename with extension                     | `file.md`        |
 | @basename  | Filename without extension                  | `file`           |
-| @parent    | Path of the parent folder (`/` if none)     | `folder`         |
+| @parent    | Path of the parent folder                   | `folder`         |
 | @extension | Extension of the file (without leading dot) | `md`             |
 
 
