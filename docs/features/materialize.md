@@ -8,7 +8,7 @@ Comment-stored queries with native markdown output. Eliminates the codeblock in 
 
 SQLSeal's current TEMPLATE renderer injects HTML into a codeblock's DOM at render time. This has three structural limitations:
 
-1. **No wikilinks in the file.** The `a()` helper produces `<a>` tags at render time. Obsidian's link parser only scans raw file text for `[[...]]` patterns, so dynamically rendered links never enter `metadataCache.links`, `resolvedLinks`, the graph, backlinks, or auto-rename.
+1. **No wikilinks in the file.** The `a()` helper produces `<a>` tags at render time. Obsidian's [link parser](https://docs.obsidian.md/Reference/TypeScript+API/MetadataCache) only scans raw file text for `[[...]]` patterns, so dynamically rendered links never enter `metadataCache.links`, `resolvedLinks`, the graph, backlinks, or auto-rename.
 
 2. **Opaque to external tools.** Agents, git diffs, grep, and plain text editors see only the codeblock source. The rendered output is ephemeral.
 
@@ -95,12 +95,12 @@ The serialization pipeline reuses existing infrastructure:
 
 1. `db.select(transformedQuery, variables)` returns `{ data, columns }` (same as `CodeblockProcessor.render()`)
 2. `ParseResults.renderAsString(data, columns)` converts all cells through `cellParser.renderAsString()`, which calls `LinkParser.renderAsString()` for link cells, producing `[[path|title]]`
-3. `getMarkdownTable()` (from `markdown-table-ts`, already a dependency) formats the result as a markdown table
-4. The table string is written between the markers via `vault.process()`
+3. `getMarkdownTable()` (from [`markdown-table-ts`](https://github.com/nicgirault/markdown-table-ts), already a dependency) formats the result as a markdown table
+4. The table string is written between the markers via [`vault.process()`](https://docs.obsidian.md/Reference/TypeScript+API/Vault/process)
 
 ### Liveness
 
-The existing reactive mechanism in `CodeblockProcessor` uses the `Omnibus` event bus to re-render when underlying tables change. MATERIALIZE uses the same approach:
+The existing reactive mechanism in `CodeblockProcessor` uses the [`@hypersphere/omnibus`](https://www.npmjs.com/package/@hypersphere/omnibus) event bus to re-render when underlying tables change. MATERIALIZE uses the same approach:
 
 1. On plugin load, scan all open files for `<!-- sqlseal: ... -->` markers
 2. Parse the SQL query from each marker
@@ -124,17 +124,17 @@ Users can always switch to source view and edit the HTML comment directly. The q
 
 #### Tier 2: Hover Edit Button
 
-In live preview, the plugin injects a small pencil icon (CodeMirror 6 widget decoration) near the materialized block. Clicking it opens a modal with:
+In live preview, the plugin injects a small pencil icon ([CodeMirror 6 widget decoration](https://codemirror.net/docs/ref/#view.WidgetType)) near the materialized block. Clicking it opens a modal with:
 
 - A text area containing the SQL query (syntax-highlighted if possible)
 - A "Run" button to preview results
 - A "Save" button that writes the updated query back into the comment
 
-Prior art: Dataview Serializer's inline refresh button, Meta Bind's input field widgets.
+Prior art: [Dataview Serializer](https://github.com/dsebastien/obsidian-dataview-serializer)'s inline refresh button, [Meta Bind](https://github.com/mProjectsCode/obsidian-meta-bind-plugin)'s input field widgets.
 
 #### Tier 3: Click-to-Reveal (Future)
 
-Same pattern Obsidian uses for `**bold**`, `[[links]]`, and math blocks in live preview. Click into the materialized region and the raw comment + markdown source appears. Click away and it collapses back to rendered output. This requires a CodeMirror 6 `ViewPlugin` with `Decoration.replace`.
+Same pattern Obsidian uses for `**bold**`, `[[links]]`, and math blocks in live preview. Click into the materialized region and the raw comment + markdown source appears. Click away and it collapses back to rendered output. This requires a [CodeMirror 6](https://codemirror.net/docs/guide/) `ViewPlugin` with [`Decoration.replace`](https://codemirror.net/docs/ref/#view.Decoration%5Ereplace).
 
 ---
 
@@ -144,11 +144,11 @@ A standalone script that materializes queries outside of Obsidian. Written in Ty
 
 ### Vault Indexing
 
-The CLI builds an in-memory SQLite database (via `better-sqlite3`) with the same four tables SQLSeal populates inside Obsidian:
+The CLI builds an in-memory SQLite database (via [`better-sqlite3`](https://github.com/WiseLibs/better-sqlite3)) with the same four tables SQLSeal populates inside Obsidian:
 
 | Table | Columns | Source |
 |:------|:--------|:-------|
-| `files` | `id, path, name, parent, depth, created_at, modified_at, file_size` + all frontmatter fields | Walk `.md` files, parse frontmatter with `gray-matter` |
+| `files` | `id, path, name, parent, depth, created_at, modified_at, file_size` + all frontmatter fields | Walk `.md` files, parse frontmatter with [`gray-matter`](https://github.com/jonschlinkert/gray-matter) |
 | `tags` | `tag, fileId, path` | Extract `tags` from frontmatter + inline `#tags` via regex |
 | `links` | `path, target, display_text, target_exists` | Parse `[[...]]` patterns from file body text |
 | `tasks` | `path, task, completed, position, heading, heading_level` | Parse `- [ ]` / `- [x]` patterns |
@@ -170,7 +170,7 @@ The CLI and plugin must produce **byte-identical output** for the same query and
 
 - Same SQL function signatures (`a()` with 2 args)
 - Same `renderAsString` logic (`[[path|title]]` for internal links, `[name](url)` for external)
-- Same `getMarkdownTable()` formatter (from `markdown-table-ts`)
+- Same `getMarkdownTable()` formatter (from [`markdown-table-ts`](https://github.com/nicgirault/markdown-table-ts))
 - Same column ordering (determined by the SQL `SELECT` clause)
 
 To validate parity: the CLI can run in `--check` mode, which reports any files where the CLI output differs from the existing materialized content without writing.
@@ -195,7 +195,7 @@ sqlseal-cli stale /path/to/vault --threshold 24h
 
 ## Comparison with Prior Art
 
-| Dimension | Dataview Serializer | Text Expand | Current SQLSeal (TEMPLATE) | **SQLSeal MATERIALIZE** |
+| Dimension | [Dataview Serializer](https://github.com/dsebastien/obsidian-dataview-serializer) | [Text Expand](https://github.com/mrjackphil/obsidian-text-expand) | Current SQLSeal (TEMPLATE) | **SQLSeal MATERIALIZE** |
 |:----------|:-------------------|:------------|:--------------------------|:------------------------|
 | Query location | HTML comment | `expander` codeblock | `sqlseal` codeblock | HTML comment |
 | Query language | DQL | Obsidian search | SQL | SQL |
@@ -248,7 +248,7 @@ TEMPLATE mode continues to work unchanged. MATERIALIZE is additive. Users can mi
 | File watcher integration | ~1 day | Extends `SealFileSync` or adds new listener. Reuses `Omnibus` event bus |
 | Idempotency + debounce | ~0.5 day | Part of materializer |
 | Hover edit button (Tier 2) | ~1.5 days | New: `src/modules/editor/materialize/editWidget.ts`. CodeMirror 6 widget + modal |
-| CLI companion | ~3 days | New package: `packages/cli/`. `better-sqlite3`, `gray-matter`, `markdown-table-ts` |
+| CLI companion | ~3 days | New package: `packages/cli/`. [`better-sqlite3`](https://github.com/WiseLibs/better-sqlite3), [`gray-matter`](https://github.com/jonschlinkert/gray-matter), [`markdown-table-ts`](https://github.com/nicgirault/markdown-table-ts) |
 | Migration command | ~1 day | New command in plugin |
 | Tests | ~2 days | Marker parser, serialization parity, idempotency, `--` encoding |
 | **Total** | **~12 days** | |
