@@ -12,6 +12,7 @@ import { Settings } from "../settings/Settings";
 import { SqlSealInlineHandler } from "./codeblockHandler/inline/InlineCodeHandler";
 import { SqlSealCodeblockHandler } from "./codeblockHandler/SqlSealCodeblockHandler";
 import { createSqlSealEditorExtension } from "../syntaxHighlight/editorExtension/inlineCodeBlock";
+import { MaterializePlugin } from "./materialize/MaterializePlugin";
 
 export const editorInit = (
 	app: App,
@@ -22,6 +23,7 @@ export const editorInit = (
 	blockHandler: SqlSealCodeblockHandler,
 	rendererRegistry: RendererRegistry,
 	settings: Settings,
+	materializePlugin: MaterializePlugin
 ) => {
 	const registerInlineCodeblocks = () => {
 		// Extension for Live Preview
@@ -81,6 +83,7 @@ export const editorInit = (
 
 	return () => {
 		registerViews();
+        materializePlugin.onload();
 
 		app.workspace.onLayoutReady(async () => {
 			await vaultLoader.loadAll();

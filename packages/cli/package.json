@@ -1,0 +1,23 @@
+{
+  "name": "@sqlseal/cli",
+  "version": "0.41.0",
+  "description": "SQLSeal CLI for materializing queries outside Obsidian",
+  "bin": {
+    "sqlseal-cli": "./bin/sqlseal-cli"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.1.2",
+    "gray-matter": "^4.0.3",
+    "markdown-table-ts": "^1.0.3",
+    "commander": "^12.1.0",
+    "sql-parser-cst": "^1.2.2"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "^22.5.0",
+    "typescript": "^5.5.4"
+  }
+}

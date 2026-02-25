@@ -4,6 +4,7 @@ import { SqlSealDatabase } from "../database/database"
 import { Sync } from "../sync/sync/sync"
 import { RendererRegistry } from "./renderer/rendererRegistry"
 import { editorInit } from "./init"
+import { MaterializePlugin } from "./materialize/MaterializePlugin"
 import { SqlSealCodeblockHandler } from "./codeblockHandler/SqlSealCodeblockHandler"
 import { SqlSealInlineHandler } from "./codeblockHandler/inline/InlineCodeHandler"
 import { Settings } from "../settings/Settings"
@@ -18,8 +19,8 @@ export const editor = new Registrator()
     .import<'settings', Promise<Settings>>()
     .register('inlineRenderer', d => d.cls(SqlSealInlineHandler).inject('app', 'db', 'settings', 'sync'))
     .register('rendererRegistry', d => d.cls(RendererRegistry).inject())
-    .register('blockHandler', d => d.cls(SqlSealCodeblockHandler).inject('app', 'db', 'cellParser', 'sync', 'rendererRegistry', 'settings'))
-    .register('init', d => d.fn(editorInit).inject('app', 'db', 'plugin', 'sync', 'inlineRenderer', 'blockHandler', 'rendererRegistry', 'settings'))
-    .export('rendererRegistry', 'init')
+    .register('blockHandler', d => d.cls(SqlSealCodeblockHandler).inject('app', 'db', 'cellParser', 'sync', 'rendererRegistry', 'settings')).register('materialize', d => d.cls(MaterializePlugin).inject('app', 'plugin', 'db', 'cellParser', 'sync'))
+    .register('init', d => d.fn(editorInit).inject('app', 'db', 'plugin', 'sync', 'inlineRenderer', 'blockHandler', 'rendererRegistry', 'settings', 'materialize'))
+    .export('rendererRegistry', 'init', 'materialize')
 
 export type EditorModule = typeof editor
