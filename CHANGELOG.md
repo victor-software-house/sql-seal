@@ -1,5 +1,13 @@
 # Releases
 
+## 0.40.0 (Fork)
+
+- feat: replaced Handlebars with Nunjucks in the TEMPLATE renderer
+- feat: added `VaultLoader` for reusable Nunjucks templates via `{% include %}` from vault `.njk` files
+- feat: added custom Nunjucks filters: `groupby` and `unique`
+- feat: added `parent` and `depth` columns to the `files` table
+- docs: updated documentation to reflect fork changes
+
 ## 0.39.1
 
 ### Patch Changes
@@ -123,7 +131,7 @@
 
 ## 0.28.0 (2025-03-14)
 
-- Added TEMPLATE view that allow to render your template with custom Handlebars template.
+- Added TEMPLATE view that allows rendering data with custom templates (originally Handlebars; migrated to Nunjucks in the fork).
 - Improved syntax highlighting - now lines with errors will get highlighted with appropriate colour to indicate the issue
 - Added @path, @fileName and @extension variables you can use inside your SQL alongside other Frontmatter properties
 
@@ -220,7 +228,7 @@ Now: `strftime("%Y", created_at)`
 
 ## 0.20.0 (2025-01-28)
 
-Added `links` table containing all the references between files. [Read more about the file structure in our documentation](https://hypersphere.blog/sql-seal/data-sources/vault-data.html#links-table)
+Added `links` table containing all the references between files. [Read more about the file structure in our documentation](./data-sources/vault-data.md#links-table)
 
 ## 0.19.2 (2025-01-27)
 
@@ -232,7 +240,7 @@ Added logging for unprocessable data to help reporting.
 
 ## 0.19.0 (2025-01-24)
 
-Adding support for JSON and JSON5 files. You can now query these data types and create tables based on them. You can use JSONPath to traverse the JSON files and extract data from it. [See more in the documentation](http://hypersphere.blog/sql-seal/data-sources/json-and-json5.html).
+Adding support for JSON and JSON5 files. You can now query these data types and create tables based on them. You can use JSONPath to traverse the JSON files and extract data from it. [See more in the documentation](./data-sources/json-and-json5.md).
 
 Added support for viewing JSON files. For now it is very simple preview with plans to expand in the future. You can disable this preview in the settings.
 
@@ -256,7 +264,7 @@ Fixed issue with variables causing error. Now you can pass variables from your f
 
 ## 0.16.0 (2025-01-16)
 
-Now you can query tables in your note and use them as data source! [Check more information in the documentation](http://hypersphere.blog/sql-seal/query-markdown-tables.html).
+Now you can query tables in your note and use them as data source! [Check more information in the documentation](./query-markdown-tables.md).
 
 ## 0.15.0 (2025-01-15)
 

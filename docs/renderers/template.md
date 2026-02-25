@@ -26,13 +26,43 @@ Current Path: {{ properties.path }}
 SELECT * FROM files LIMIT 10
 ```
 
-## Nunjucks Support and `VaultLoader`
+## Custom Filters
 
-SQLSeal supports Nunjucks features including custom filters like `groupby` and `unique`.
+SQLSeal registers two custom Nunjucks filters:
 
-You can also use the `VaultLoader` to load template files directly from your vault using `{% include %}`.
+### `groupby`
+Groups an array of objects by a key. Returns an array of `{ grouper, list }` objects.
 
-### Example with Include
+```sqlseal
+TEMPLATE
+{% for group in data | groupby("parent") %}
+<h3>{{ group.grouper }}</h3>
+<ul>
+{% for row in group.list %}
+  <li>{{ row.name }}</li>
+{% endfor %}
+</ul>
+{% endfor %}
+
+SELECT name, parent FROM files
+```
+
+### `unique`
+Deduplicates an array. Pass an optional key to deduplicate by a specific field.
+
+```sqlseal
+TEMPLATE
+{% for tag in data | unique("tag") %}
+  <span>{{ tag.tag }}</span>
+{% endfor %}
+
+SELECT tag FROM tags
+```
+
+## `VaultLoader` and `{% include %}`
+
+You can load `.njk` template files from your vault using `{% include %}`. The `VaultLoader` watches for file changes and keeps templates in sync.
+
 ```sqlseal
 TEMPLATE
 {% include "_templates/file-list.njk" %}

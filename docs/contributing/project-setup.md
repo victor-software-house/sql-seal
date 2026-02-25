@@ -13,7 +13,7 @@ The project is written in TypeScript.
 ## Initial setup
 To clone the project:
 ```bash
-git clone git@github.com:h-sphere/sql-seal.git
+git clone git@github.com:victor-software-house/sql-seal.git
 ```
 
 Then you can install dependencies:

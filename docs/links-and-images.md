@@ -77,8 +77,8 @@ This approach automatically renders interactive checkboxes without requiring any
 For backwards compatibility, you can also use the checkbox function with a single parameter:
 
 ```sqlseal
--- Using the checkbox column
 SELECT task, checkbox(completed) FROM tasks
+```
 
 The checkbox function accepts a single parameter which can be either:
 - A numeric value (0 = unchecked, 1 = checked) - renders as a disabled checkbox

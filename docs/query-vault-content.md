@@ -25,5 +25,14 @@ Tags are kept in a separate table `tags`. To select all files that have specific
 SELECT files.* FROM files JOIN tags ON files.path=tags.path WHERE tag = '#important'
 ```
 
+## Filter by Links
+You can query outgoing and incoming links using the `links` table:
+
+```sqlseal
+SELECT a(path) FROM links WHERE target = @path
+```
+
+The query above returns all files that link to the current file (backlinks).
+
 ## Table Structure
 See full breakdown in [Data Sources: Vault Data](./data-sources/vault-data.md).

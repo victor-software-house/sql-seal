@@ -38,7 +38,7 @@ LIMIT 10
 </div>
     <div class="image">
 
-![Example](./langing-page/example.png)
+![Example](./landing-page/example.png)
 
 </div>
   </div>
@@ -112,7 +112,7 @@ SQLSeal Charts is currently being reviewed by Obsidian. As soon as it gets appro
 </div>
 <div class="image">
 
-![Chart](./langing-page/charts.png)
+![Chart](./landing-page/charts.png)
 
 </div>
 </div>

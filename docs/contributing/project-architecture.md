@@ -5,7 +5,7 @@ SQLSeal is an Obsidian Plugin written in TypeScript. We use the following tech s
 - [SQL.JS](https://github.com/sql-js/sql.js): [SQLite](https://www.sqlite.org/) compiled into WebAssembly
     - [AbsurdSQL](https://github.com/jlongster/absurd-sql) to persist SQLite page blocks into IndexedDB and not keep the database in the memory
 - [AGGrid](https://www.ag-grid.com/) - grid solution, default table renderer
-- Node-SQL-Parser - to parse SQL and modify table names before sending it to SQLite
+- [sql-parser-cst](https://github.com/nicktomlin/sql-parser-cst) - to parse SQL and modify table names before sending it to SQLite
 - Comlink - for Webworker communication abstraction
 
 ## Architecture overview
@@ -21,7 +21,7 @@ The plugin is designed with extensible architecture in mind. I want to encourage
 > [!NOTE] Stage
 > Current Stage: Proof of Concept
 
-SQLSeal by default gets 3 renderers (or views) bundled in: GRID (default), HTML and MARKDOWN. I want the plugin to reach the stage where external plugins can register their own renderers with thier own configuration and control how the query result is being displayed. I work on a SQLSeal Plot (codename) that allows you to chart results of your query. Once it's finished documentation and interface for this feature can be finalised.
+SQLSeal ships with 5 renderers (or views): GRID (default), HTML, MARKDOWN, LIST and TEMPLATE. External plugins can register their own renderers with their own configuration and control how the query result is displayed. The SQLSeal Charts plugin uses this interface to add chart-based rendering.
 
 ### Register new data source
 > [!NOTE] Stage
@@ -49,5 +49,5 @@ Queries have the following lifecycle:
 | SQLSeal Parser                    | Initial parsing that separates table queries, renderers (and any other potential options) and select statement                                                                                                       |
 | Transform tables inside the query | Many files can define tables with the same name.<br>To make it work, we transform name (like `data` user could define)<br>into internal name like `table_093fjd9sffc329`                                             |
 | Executes Query                    | Query sent to SQLite                                                                                                                                                                                                 |
-| Renders using chosen renderer     | Renderer is determined based<br>on intermediateContent value. For now can be either `HTML`, `MARKDOWN` or `GRID` but more are planned for the future (also will add posibility to register them from other plugins). |
+| Renders using chosen renderer     | Renderer is determined based<br>on the view declaration. Built-in renderers: `GRID`, `HTML`, `MARKDOWN`, `LIST`, `TEMPLATE`. External plugins can register additional renderers. |
 | Watches for file changes          | Using Omnibus library to register eventListeners. On change refreshes the query. The change can modify table statements, renderers, etc so whole pipeline needs to be revaluated.                                    |
