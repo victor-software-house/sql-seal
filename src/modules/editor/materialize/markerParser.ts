@@ -3,6 +3,7 @@ export interface MaterializeMarker {
     endPos: number;
     query: string;
     isExternalFile: boolean;
+    queryEndPos: number;
     existingContentStartPos: number;
     existingContentEndPos: number;
     existingContent: string;
@@ -12,13 +13,8 @@ export interface MaterializeMarker {
 export function parseMaterializeMarkers(text: string): MaterializeMarker[] {
     const markers: MaterializeMarker[] = [];
     
-    // Regular expression to find the start marker: <!-- sqlseal: ... --> or <!-- sqlseal-file: ... -->
     const startRegex = /<!--\s*sqlseal(-file)?:\s*([\s\S]*?)\s*-->/g;
-    
-    // Regex for updated timestamp: <!-- sqlseal-updated: ... -->
     const updatedRegex = /<!--\s*sqlseal-updated:\s*([^>]+?)\s*-->/g;
-    
-    // Regex for end sentinel: <!-- /sqlseal -->
     const endRegex = /<!--\s*\/sqlseal\s*-->/g;
 
     let startMatch;
@@ -27,24 +23,21 @@ export function parseMaterializeMarkers(text: string): MaterializeMarker[] {
         const isExternalFile = startMatch[1] === '-file';
         const queryOrFile = startMatch[2].trim();
         
-        const contentStartPos = startRegex.lastIndex;
+        const queryEndPos = startRegex.lastIndex;
         
-        // Find the matching end marker
-        endRegex.lastIndex = contentStartPos;
+        endRegex.lastIndex = queryEndPos;
         const endMatch = endRegex.exec(text);
         
         if (!endMatch) {
-            // No end marker found, skip this block
             continue;
         }
         
         const endPos = endMatch.index + endMatch[0].length;
         
-        // Now look for updated timestamp between start and end
         let updatedTimestamp: string | undefined;
-        let existingContentStartPos = contentStartPos;
+        let existingContentStartPos = queryEndPos;
         
-        updatedRegex.lastIndex = contentStartPos;
+        updatedRegex.lastIndex = queryEndPos;
         const updatedMatch = updatedRegex.exec(text);
         
         if (updatedMatch && updatedMatch.index < endMatch.index) {
@@ -60,13 +53,13 @@ export function parseMaterializeMarkers(text: string): MaterializeMarker[] {
             endPos,
             query: queryOrFile,
             isExternalFile,
+            queryEndPos,
             existingContentStartPos,
             existingContentEndPos,
             existingContent,
             updatedTimestamp
         });
         
-        // Advance startRegex to not overlap with current block
         startRegex.lastIndex = endPos;
     }
     

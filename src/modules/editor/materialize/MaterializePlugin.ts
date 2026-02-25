@@ -8,7 +8,6 @@ import { createMaterializeEditPlugin } from "./ui/editWidget";
 
 export class MaterializePlugin {
     private materializer: Materializer;
-    // Map file path to debounced process function
     private debouncers = new Map<string, () => void>();
 
     constructor(
@@ -24,20 +23,20 @@ export class MaterializePlugin {
 
     public async onload() {
         this.app.workspace.onLayoutReady(() => {
-            // Find all files with markers and initialize them
             this.scanAndMaterializeAll();
             
-            // Watch for file modifications
             this.plugin.registerEvent(
                 this.app.vault.on('modify', (file) => {
                     if (file instanceof TFile && file.extension === 'md') {
+                        if (this.materializer.isSelfTriggered(file.path)) {
+                            return;
+                        }
                         this.queueProcessFile(file);
                     }
                 })
             );
         });
 
-        // Add a command to force migration or materialization
         this.plugin.addCommand({
             id: 'sqlseal-materialize-all',
             name: 'Materialize all queries',
@@ -70,9 +69,8 @@ export class MaterializePlugin {
     private async scanAndMaterializeAll(force: boolean = false) {
         const mdFiles = this.app.vault.getMarkdownFiles();
         for (const file of mdFiles) {
-            // We can read file cache first to quickly check if it might contain markers
-            const content = await this.app.vault.read(file);
-            if (content.includes('<!-- sqlseal:')) {
+            const content = await this.app.vault.cachedRead(file);
+            if (content.includes('<!-- sqlseal:') || content.includes('<!-- sqlseal-file:')) {
                 this.queueProcessFile(file);
             }
         }

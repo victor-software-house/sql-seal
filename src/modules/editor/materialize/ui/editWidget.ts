@@ -6,6 +6,7 @@ import { App, Modal, Setting } from "obsidian";
 class EditQueryModal extends Modal {
     query: string;
     onSave: (newQuery: string) => void;
+    private resultEl: HTMLElement;
 
     constructor(app: App, query: string, onSave: (newQuery: string) => void) {
         super(app);
@@ -18,13 +19,10 @@ class EditQueryModal extends Modal {
         contentEl.empty();
         contentEl.createEl("h2", { text: "Edit SQLSeal Query" });
 
-        let textArea: HTMLTextAreaElement;
-
         new Setting(contentEl)
             .setName("Query")
             .setDesc("Edit the SQL query for this materialized block")
             .addTextArea((text) => {
-                textArea = text.inputEl;
                 text.setValue(this.query);
                 text.onChange((value) => {
                     this.query = value;
@@ -35,7 +33,24 @@ class EditQueryModal extends Modal {
                 text.inputEl.style.fontFamily = "monospace";
             });
 
+        this.resultEl = contentEl.createDiv({ cls: "sqlseal-materialize-preview" });
+        this.resultEl.style.maxHeight = "200px";
+        this.resultEl.style.overflow = "auto";
+        this.resultEl.style.marginBottom = "8px";
+        this.resultEl.style.fontFamily = "monospace";
+        this.resultEl.style.fontSize = "0.85em";
+        this.resultEl.style.whiteSpace = "pre-wrap";
+        this.resultEl.style.display = "none";
+
         new Setting(contentEl)
+            .addButton((btn) =>
+                btn
+                    .setButtonText("Run")
+                    .onClick(() => {
+                        this.resultEl.style.display = "block";
+                        this.resultEl.setText("Preview is not available in the editor modal. Save to materialize.");
+                    })
+            )
             .addButton((btn) =>
                 btn
                     .setButtonText("Save")
@@ -62,15 +77,17 @@ class EditWidget extends WidgetType {
     constructor(
         private app: App,
         private query: string,
-        private startPos: number,
-        private endPos: number,
+        private queryCommentStart: number,
+        private queryCommentEnd: number,
         private isExternalFile: boolean
     ) {
         super();
     }
 
     eq(other: EditWidget) {
-        return other.query === this.query && other.startPos === this.startPos && other.endPos === this.endPos;
+        return other.query === this.query &&
+            other.queryCommentStart === this.queryCommentStart &&
+            other.queryCommentEnd === this.queryCommentEnd;
     }
 
     toDOM(view: EditorView): HTMLElement {
@@ -78,8 +95,7 @@ class EditWidget extends WidgetType {
         span.className = "sqlseal-materialize-edit-widget";
         span.setAttribute("aria-label", "Edit Query");
         
-        // Use a simple pencil icon SVG
-        span.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>`;
+        span.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>`;
         
         span.style.cursor = "pointer";
         span.style.color = "var(--text-muted)";
@@ -91,7 +107,6 @@ class EditWidget extends WidgetType {
             e.stopPropagation();
 
             if (this.isExternalFile) {
-                // For external files, just open the file
                 const file = this.app.vault.getAbstractFileByPath(this.query);
                 if (file) {
                     this.app.workspace.getLeaf(true).openFile(file as any);
@@ -99,12 +114,11 @@ class EditWidget extends WidgetType {
                 return;
             }
 
-            // Open modal to edit query
             new EditQueryModal(this.app, this.query, (newQuery) => {
                 view.dispatch({
                     changes: {
-                        from: this.startPos,
-                        to: this.endPos,
+                        from: this.queryCommentStart,
+                        to: this.queryCommentEnd,
                         insert: `<!-- sqlseal: ${newQuery} -->`
                     }
                 });
@@ -132,16 +146,12 @@ export function createMaterializeEditPlugin(app: App) {
         buildDecorations(view: EditorView): DecorationSet {
             const builder = new RangeSetBuilder<Decoration>();
             
-            // We only decorate within the visible viewport
-            for (let {from, to} of view.visibleRanges) {
+            for (const {from, to} of view.visibleRanges) {
                 const text = view.state.doc.sliceString(from, to);
-                // We need the parseMaterializeMarkers function to handle a slice,
-                // but the offsets will be relative to 'from'. Let's adjust them.
                 const markers = parseMaterializeMarkers(text);
                 
                 for (const marker of markers) {
-                    // Place the widget at the end of the start marker
-                    const widgetPos = from + marker.existingContentStartPos;
+                    const widgetPos = from + marker.queryEndPos;
                     builder.add(
                         widgetPos,
                         widgetPos,
@@ -150,10 +160,10 @@ export function createMaterializeEditPlugin(app: App) {
                                 app,
                                 marker.query,
                                 from + marker.startPos,
-                                from + marker.existingContentStartPos, // end of the marker is where the content starts
+                                from + marker.queryEndPos,
                                 marker.isExternalFile
                             ),
-                            side: 1 // Right side of the position
+                            side: 1
                         })
                     );
                 }
