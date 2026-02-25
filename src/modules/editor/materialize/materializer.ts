@@ -104,13 +104,14 @@ export class Materializer {
                         }
                     });
 
+                    if (!forceRefresh && marker.existingContent.trim() === tab.trim()) {
+                        continue;
+                    }
+
                     const updatedTimestamp = new Date().toISOString();
                     const newBlockContent = `\n<!-- sqlseal-updated: ${updatedTimestamp} -->\n\n${tab}\n`;
                     newContents.set(i, newBlockContent);
-
-                    if (marker.existingContent.trim() !== tab.trim()) {
-                        changed = true;
-                    }
+                    changed = true;
                 } catch (e: any) {
                     const newBlockContent = `\n_Error: ${e.message}_\n`;
                     newContents.set(i, newBlockContent);

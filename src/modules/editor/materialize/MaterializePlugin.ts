@@ -22,20 +22,18 @@ export class MaterializePlugin {
     }
 
     public async onload() {
-        this.app.workspace.onLayoutReady(() => {
-            this.scanAndMaterializeAll();
-            
-            this.plugin.registerEvent(
-                this.app.vault.on('modify', (file) => {
-                    if (file instanceof TFile && file.extension === 'md') {
-                        if (this.materializer.isSelfTriggered(file.path)) {
-                            return;
-                        }
-                        this.queueProcessFile(file);
+        this.scanAndMaterializeAll();
+
+        this.plugin.registerEvent(
+            this.app.vault.on('modify', (file) => {
+                if (file instanceof TFile && file.extension === 'md') {
+                    if (this.materializer.isSelfTriggered(file.path)) {
+                        return;
                     }
-                })
-            );
-        });
+                    this.queueProcessFile(file);
+                }
+            })
+        );
 
         this.plugin.addCommand({
             id: 'sqlseal-materialize-all',
@@ -71,7 +69,11 @@ export class MaterializePlugin {
         for (const file of mdFiles) {
             const content = await this.app.vault.cachedRead(file);
             if (content.includes('<!-- sqlseal:') || content.includes('<!-- sqlseal-file:')) {
-                this.queueProcessFile(file);
+                if (force) {
+                    this.materializer.processFile(file, true);
+                } else {
+                    this.queueProcessFile(file);
+                }
             }
         }
     }

@@ -26,7 +26,5 @@
     // "strict": true
   },
   "include": [
-    "**/*.ts"],
-  "exclude": [
-    "packages/**"]
+    "**/*.ts"]
 }
