@@ -6,6 +6,7 @@ import {
 import { RendererRegistry } from "../editor/renderer/rendererRegistry";
 import { SqlSealDatabase } from "../database/database";
 import { ModernCellParser } from "../syntaxHighlight/cellParser/ModernCellParser";
+import { registerRestApi } from "./restApi";
 
 const SQLSEAL_API_KEY = "___sqlSeal";
 const SQLSEAL_QUEUED_PLUGINS = "___sqlSeal_queue";
@@ -40,5 +41,7 @@ export const apiInit = (
 		});
 
 		(window as any)[SQLSEAL_QUEUED_PLUGINS] = [];
+
+		registerRestApi(plugin.app, plugin, db, cellParser);
 	};
 };
