@@ -18,12 +18,16 @@ const extractFrontmatterFromFile = (file: TFile, plugin: Plugin): Record<string,
 }
 
 function fileData(file: TFile, { ...frontmatter }: Record<string, any>) {
+    const isFolderNote = file.basename === file.parent?.name
     return {
         ...frontmatter,
         id: file.path,
         path: file.path,
         name: file.basename,
-        parent: file.parent?.path ?? '',
+        parent: isFolderNote
+            ? (file.parent?.parent?.path ?? '')
+            : (file.parent?.path ?? ''),
+        is_folder_note: isFolderNote ? 1 : 0,
         depth: file.path.split('/').length,
         created_at: (new Date(file.stat.ctime)).toISOString(),
         modified_at: (new Date(file.stat.mtime)).toISOString(),

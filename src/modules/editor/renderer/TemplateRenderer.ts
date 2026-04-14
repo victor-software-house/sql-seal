@@ -33,8 +33,46 @@ function registerFilters(env: nunjucks.Environment): void {
     });
 }
 
+interface TemplateDirectives {
+    missing: string | null;
+    blank: string | null;
+}
+
 interface TemplateRendererConfig {
     template: nunjucks.Template;
+    directives: TemplateDirectives;
+}
+
+const DIRECTIVE_RE = /^(missing|blank)\s*=\s*['"](.+?)['"]\s*$/gm;
+
+function parseDirectives(config: string): { directives: TemplateDirectives; templateSource: string } {
+    const directives: TemplateDirectives = { missing: null, blank: null }
+    const templateSource = config.replace(DIRECTIVE_RE, (_, key, value) => {
+        directives[key as keyof TemplateDirectives] = value
+        return ''
+    }).trimStart()
+    return { directives, templateSource }
+}
+
+function isBlank(v: unknown): boolean {
+    return v == null || String(v).trim().length === 0
+}
+
+function applyDirectives(data: Record<string, any>[], directives: TemplateDirectives): Record<string, any>[] {
+    if (!directives.missing && !directives.blank) return data
+    return data.map(row => {
+        const out: Record<string, any> = {}
+        for (const [k, v] of Object.entries(row)) {
+            if (v == null && directives.missing) {
+                out[k] = directives.missing
+            } else if (isBlank(v) && directives.blank) {
+                out[k] = directives.blank
+            } else {
+                out[k] = v
+            }
+        }
+        return out
+    })
 }
 
 export class TemplateRenderer implements RendererConfig {
@@ -67,10 +105,13 @@ export class TemplateRenderer implements RendererConfig {
         if (!config) {
             return {
                 template: nunjucks.compile("No template provided", this.env),
+                directives: { missing: null, blank: null },
             };
         }
+        const { directives, templateSource } = parseDirectives(config)
         return {
-            template: nunjucks.compile(config, this.env),
+            template: nunjucks.compile(templateSource, this.env),
+            directives,
         };
     }
 
@@ -88,8 +129,13 @@ export class TemplateRenderer implements RendererConfig {
                     (el) => new nunjucks.runtime.SafeString(el.outerHTML),
                 );
 
+                const parsed = applyDirectives(
+                    parser.parse(data, columns),
+                    config.directives,
+                )
+
                 el.innerHTML = config.template.render({
-                    data: parser.parse(data, columns),
+                    data: parsed,
                     columns,
                     properties: frontmatter,
                 });
