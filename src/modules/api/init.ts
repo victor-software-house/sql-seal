@@ -32,15 +32,12 @@ export const apiInit = (
 		const queuedPlugins = (window as any)[SQLSEAL_QUEUED_PLUGINS] as
 			| PluginRegister[]
 			| undefined;
-		if (!queuedPlugins) {
-			return;
+		if (queuedPlugins) {
+			queuedPlugins.forEach((pl) => {
+				api.registerForPluginNew(pl);
+			});
+			(window as any)[SQLSEAL_QUEUED_PLUGINS] = [];
 		}
-
-		queuedPlugins.forEach((pl) => {
-			api.registerForPluginNew(pl);
-		});
-
-		(window as any)[SQLSEAL_QUEUED_PLUGINS] = [];
 
 		registerRestApi(plugin.app, plugin, db, cellParser);
 	};
