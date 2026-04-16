@@ -30,3 +30,4 @@ CLAUDE.local.md
 .claude/settings.local.json
 .cognition/config.local.json
 .firecrawl/
+prompts.db
