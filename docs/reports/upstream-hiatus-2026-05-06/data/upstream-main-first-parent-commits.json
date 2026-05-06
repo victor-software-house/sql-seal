@@ -1,0 +1,376 @@
+{
+  "repository": "h-sphere/sql-seal",
+  "base": "bf24096d75240d6fb11ea944a64b763f0c7bafee",
+  "head": "8972c9c7f428109a661c6dfa8bd2f90167b55e68",
+  "range": "bf24096d75240d6fb11ea944a64b763f0c7bafee..upstream/main",
+  "traversal": "first-parent reverse",
+  "generatedAt": "2026-05-06T17:37:39.813Z",
+  "commits": [
+    {
+      "sequence": 1,
+      "hash": "bf085fe896f330e2a4f224a7891034004e8e0e2a",
+      "shortHash": "bf085fe",
+      "parents": [
+        "bf24096d75240d6fb11ea944a64b763f0c7bafee"
+      ],
+      "authorName": "Kacper",
+      "authorEmail": "kulak@kulak.at",
+      "authorDate": "2026-03-22T18:01:03Z",
+      "commitDate": "2026-03-22T18:01:03Z",
+      "subject": "Migrating SQL Engine to wa-sqlite (#193)",
+      "refs": "",
+      "additions": 2250,
+      "deletions": 1672,
+      "filesChanged": 60,
+      "files": [
+        ".changeset/old-wombats-slide.md",
+        ".claude/settings.local.json",
+        "docs/contributing/project-architecture.md",
+        "esbuild.config.mjs",
+        "jest.config.js",
+        "jest.config.mjs",
+        "jest.setup.mjs",
+        "package.json",
+        "pnpm-lock.yaml",
+        "src/main.ts",
+        "src/modules/api/init.ts",
+        "src/modules/api/module.ts",
+        "src/modules/api/pluginApi/sqlSealApi.ts",
+        "src/modules/api/pluginApi/table.ts",
+        "src/modules/database/database.ts",
+        "src/modules/database/factory.ts",
+        "src/modules/database/module.ts",
+        "src/modules/database/sqlocal/databaseProvider.ts",
+        "src/modules/database/sqlocal/index.ts",
+        "src/modules/database/sqlocal/schema.ts",
+        "src/modules/database/sqlocal/sqlocalDatabaseProxy.ts",
+        "src/modules/database/sqlocal/sqlocalWorkerDatabase.ts",
+        "src/modules/database/worker/database.ts",
+        "src/modules/editor/codeblockHandler/CodeblockProcessor.ts",
+        "src/modules/editor/codeblockHandler/SqlSealCodeblockHandler.ts",
+        "src/modules/editor/codeblockHandler/inline/InlineCodeHandler.ts",
+        "src/modules/editor/codeblockHandler/inline/InlineProcessor.ts",
+        "src/modules/editor/init.ts",
+        "src/modules/editor/module.ts",
+        "src/modules/editor/sql/sqlTransformer.ts",
+        "src/modules/explorer/Editor.ts",
+        "src/modules/explorer/InitFactory.ts",
+        "src/modules/explorer/SQLSealFileView.ts",
+        "src/modules/explorer/database/__tests__/__mocks__/wa-sqlite-wasm-url.ts",
+        "src/modules/explorer/database/__tests__/memoryDatabase.test.ts",
+        "src/modules/explorer/database/__tests__/test.db",
+        "src/modules/explorer/database/databaseManager.ts",
+        "src/modules/explorer/database/memoryDatabase.ts",
+        "src/modules/explorer/database/waSqliteMemoryDatabase.ts",
+        "src/modules/explorer/explorer/ExplorerView.ts",
+        "src/modules/explorer/module.ts",
+        "src/modules/explorer/schemaVisualiser/SchemaVisualiser.ts",
+        "src/modules/main/init.ts",
+        "src/modules/main/module.ts",
+        "src/modules/sync/fileSyncController/fileSyncFactory.ts",
+        "src/modules/sync/module.ts",
+        "src/modules/sync/repository/abstractRepository.ts",
+        "src/modules/sync/repository/tableDefinitions.ts",
+        "src/modules/sync/sync/sync.ts",
+        "src/modules/sync/sync/syncFactory.ts",
+        "src/modules/sync/sync/tables/abstractFileSyncTable.ts",
+        "src/modules/sync/sync/tables/filesTable.ts",
+        "src/modules/syntaxHighlight/cellParser/ModernCellParser.ts",
+        "src/modules/syntaxHighlight/cellParser/factory.ts",
+        "src/modules/syntaxHighlight/editorExtension/inlineCodeBlock.ts",
+        "src/modules/syntaxHighlight/module.ts",
+        "src/types/wa-sqlite.d.ts",
+        "src/utils/registerObservers.test.ts",
+        "src/utils/sanitiseColumn.ts",
+        "tsconfig.json"
+      ],
+      "githubUrl": "https://github.com/h-sphere/sql-seal/commit/bf085fe896f330e2a4f224a7891034004e8e0e2a"
+    },
+    {
+      "sequence": 2,
+      "hash": "f57e0f5a0009dbf18a6871ca77ddc7db68ba497f",
+      "shortHash": "f57e0f5",
+      "parents": [
+        "bf085fe896f330e2a4f224a7891034004e8e0e2a"
+      ],
+      "authorName": "Kacper",
+      "authorEmail": "kulak@kulak.at",
+      "authorDate": "2026-03-22T23:07:08Z",
+      "commitDate": "2026-03-22T23:07:08Z",
+      "subject": "fix: include release version in PR title and commit name (#204)",
+      "refs": "",
+      "additions": 12,
+      "deletions": 5,
+      "filesChanged": 1,
+      "files": [
+        ".github/workflows/release.yml"
+      ],
+      "githubUrl": "https://github.com/h-sphere/sql-seal/commit/f57e0f5a0009dbf18a6871ca77ddc7db68ba497f"
+    },
+    {
+      "sequence": 3,
+      "hash": "d9cb4d5feaa8d433fa912e9d536bafb9b22e1b82",
+      "shortHash": "d9cb4d5",
+      "parents": [
+        "f57e0f5a0009dbf18a6871ca77ddc7db68ba497f"
+      ],
+      "authorName": "Kacper",
+      "authorEmail": "kulak@kulak.at",
+      "authorDate": "2026-03-29T10:43:53+01:00",
+      "commitDate": "2026-03-29T10:43:53+01:00",
+      "subject": "fix: restore syntax highlighting inside Obsidian callouts (#205)",
+      "refs": "",
+      "additions": 211,
+      "deletions": 29,
+      "filesChanged": 4,
+      "files": [
+        ".changeset/gentle-ducks-peel.md",
+        "src/modules/syntaxHighlight/editorExtension/codeBlockExtraction.ts",
+        "src/modules/syntaxHighlight/editorExtension/syntaxHighlight.test.ts",
+        "src/modules/syntaxHighlight/editorExtension/syntaxHighlight.ts"
+      ],
+      "githubUrl": "https://github.com/h-sphere/sql-seal/commit/d9cb4d5feaa8d433fa912e9d536bafb9b22e1b82"
+    },
+    {
+      "sequence": 4,
+      "hash": "03dfcd78b27c5f2fad0ce1998526a2a4ad93733c",
+      "shortHash": "03dfcd7",
+      "parents": [
+        "d9cb4d5feaa8d433fa912e9d536bafb9b22e1b82"
+      ],
+      "authorName": "Kacper",
+      "authorEmail": "kulak@kulak.at",
+      "authorDate": "2026-03-29T11:15:57+01:00",
+      "commitDate": "2026-03-29T11:15:57+01:00",
+      "subject": "fix(parser): fixing select keyword parsing outside the SQL queries (#206)",
+      "refs": "",
+      "additions": 115,
+      "deletions": 1,
+      "filesChanged": 3,
+      "files": [
+        ".changeset/bright-weeks-chew.md",
+        "src/modules/editor/parser.test.ts",
+        "src/modules/editor/parser.ts"
+      ],
+      "githubUrl": "https://github.com/h-sphere/sql-seal/commit/03dfcd78b27c5f2fad0ce1998526a2a4ad93733c"
+    },
+    {
+      "sequence": 5,
+      "hash": "c8567131cd52587ae49acb7402bfb9a52c3388b9",
+      "shortHash": "c856713",
+      "parents": [
+        "03dfcd78b27c5f2fad0ce1998526a2a4ad93733c"
+      ],
+      "authorName": "Kacper",
+      "authorEmail": "kulak@kulak.at",
+      "authorDate": "2026-03-29T20:31:15+01:00",
+      "commitDate": "2026-03-29T20:31:15+01:00",
+      "subject": "feat: expose task status symbol in tasks table (#207)",
+      "refs": "",
+      "additions": 138,
+      "deletions": 6,
+      "filesChanged": 6,
+      "files": [
+        ".changeset/orange-showers-argue.md",
+        "docs/data-sources/tasks-statuses.png",
+        "docs/data-sources/vault-data.md",
+        "src/modules/sync/sync/tables/tasksTable.test.ts",
+        "src/modules/sync/sync/tables/tasksTable.ts",
+        "src/modules/syntaxHighlight/cellParser/parser/checkbox.ts"
+      ],
+      "githubUrl": "https://github.com/h-sphere/sql-seal/commit/c8567131cd52587ae49acb7402bfb9a52c3388b9"
+    },
+    {
+      "sequence": 6,
+      "hash": "fc24a4f9c048d21322ba2ccbbdad3f6f9163335a",
+      "shortHash": "fc24a4f",
+      "parents": [
+        "c8567131cd52587ae49acb7402bfb9a52c3388b9"
+      ],
+      "authorName": "Kacper",
+      "authorEmail": "kulak@kulak.at",
+      "authorDate": "2026-04-06T12:36:50+01:00",
+      "commitDate": "2026-04-06T12:36:50+01:00",
+      "subject": "feat: add JSONL/NDJSON file format support with sidebar preview (#203)",
+      "refs": "",
+      "additions": 351,
+      "deletions": 1,
+      "filesChanged": 9,
+      "files": [
+        ".changeset/evil-loops-feel.md",
+        "docs/.vitepress/config.mts",
+        "docs/data-sources/jsonl.md",
+        "src/modules/settings/SQLSealSettingsTab.ts",
+        "src/modules/settings/init.ts",
+        "src/modules/settings/settingsTabSection/SettingsJsonlControls.ts",
+        "src/modules/settings/view/JsonlView.ts",
+        "src/modules/sync/syncStrategy/JsonlFileSyncStrategy.ts",
+        "src/modules/sync/syncStrategy/SyncStrategyFactory.ts"
+      ],
+      "githubUrl": "https://github.com/h-sphere/sql-seal/commit/fc24a4f9c048d21322ba2ccbbdad3f6f9163335a"
+    },
+    {
+      "sequence": 7,
+      "hash": "b852977496fe54763e13acdf0669d5fc261b7b68",
+      "shortHash": "b852977",
+      "parents": [
+        "fc24a4f9c048d21322ba2ccbbdad3f6f9163335a"
+      ],
+      "authorName": "Kacper",
+      "authorEmail": "kulak@kulak.at",
+      "authorDate": "2026-04-06T12:37:36+01:00",
+      "commitDate": "2026-04-06T12:37:36+01:00",
+      "subject": "chore: Disabling console logs on production builds (#208)",
+      "refs": "",
+      "additions": 6,
+      "deletions": 1,
+      "filesChanged": 2,
+      "files": [
+        ".changeset/dark-signs-show.md",
+        "src/modules/main/module.ts"
+      ],
+      "githubUrl": "https://github.com/h-sphere/sql-seal/commit/b852977496fe54763e13acdf0669d5fc261b7b68"
+    },
+    {
+      "sequence": 8,
+      "hash": "c038366783892f516324b10d34c092aea77ef40c",
+      "shortHash": "c038366",
+      "parents": [
+        "b852977496fe54763e13acdf0669d5fc261b7b68"
+      ],
+      "authorName": "Kacper",
+      "authorEmail": "kulak@kulak.at",
+      "authorDate": "2026-04-06T12:50:00+01:00",
+      "commitDate": "2026-04-06T12:50:00+01:00",
+      "subject": "feat: add TAGS() macro and auto-detection for multi-tag AND queries (#202)",
+      "refs": "",
+      "additions": 406,
+      "deletions": 22,
+      "filesChanged": 8,
+      "files": [
+        ".changeset/giant-times-roll.md",
+        "docs/faq/understanding-tags.md",
+        "docs/query-vault-content.md",
+        "src/modules/editor/codeblockHandler/CodeblockProcessor.ts",
+        "src/modules/editor/codeblockHandler/inline/InlineProcessor.ts",
+        "src/modules/editor/sql/sqlTransformer.ts",
+        "src/modules/editor/sql/transformer.test.ts",
+        "src/modules/settings/SQLSealSettingsTab.ts"
+      ],
+      "githubUrl": "https://github.com/h-sphere/sql-seal/commit/c038366783892f516324b10d34c092aea77ef40c"
+    },
+    {
+      "sequence": 9,
+      "hash": "33e19df3db1ae38df09a404efbfca793967e437c",
+      "shortHash": "33e19df",
+      "parents": [
+        "c038366783892f516324b10d34c092aea77ef40c"
+      ],
+      "authorName": "Kacper",
+      "authorEmail": "kulak@kulak.at",
+      "authorDate": "2026-04-07T08:53:15+01:00",
+      "commitDate": "2026-04-07T08:53:15+01:00",
+      "subject": "fix: fixing issue with config and extra logs (#209)",
+      "refs": "",
+      "additions": 167,
+      "deletions": 89,
+      "filesChanged": 8,
+      "files": [
+        ".changeset/poor-foxes-fall.md",
+        "src/modules/database/factory.ts",
+        "src/modules/database/sqlocal/sqlocalWorkerDatabase.ts",
+        "src/modules/main/init.ts",
+        "src/modules/main/module.ts",
+        "src/modules/sync/sync/sync.ts",
+        "src/modules/syntaxHighlight/cellParser/ModernCellParser.ts",
+        "src/utils/logger.ts"
+      ],
+      "githubUrl": "https://github.com/h-sphere/sql-seal/commit/33e19df3db1ae38df09a404efbfca793967e437c"
+    },
+    {
+      "sequence": 10,
+      "hash": "6d4dcc5ece28ecb2ef24eb81458f0f38633d2d96",
+      "shortHash": "6d4dcc5",
+      "parents": [
+        "33e19df3db1ae38df09a404efbfca793967e437c"
+      ],
+      "authorName": "github-actions[bot]",
+      "authorEmail": "41898282+github-actions[bot]@users.noreply.github.com",
+      "authorDate": "2026-04-12T10:46:01+01:00",
+      "commitDate": "2026-04-12T10:46:01+01:00",
+      "subject": "Release 0.40.0 (#201)",
+      "refs": "",
+      "additions": 122,
+      "deletions": 43,
+      "filesChanged": 13,
+      "files": [
+        ".changeset/bright-weeks-chew.md",
+        ".changeset/dark-signs-show.md",
+        ".changeset/evil-loops-feel.md",
+        ".changeset/gentle-ducks-peel.md",
+        ".changeset/giant-times-roll.md",
+        ".changeset/old-wombats-slide.md",
+        ".changeset/orange-showers-argue.md",
+        ".changeset/poor-foxes-fall.md",
+        ".changeset/status.json",
+        "CHANGELOG.md",
+        "manifest.json",
+        "package.json",
+        "versions.json"
+      ],
+      "githubUrl": "https://github.com/h-sphere/sql-seal/commit/6d4dcc5ece28ecb2ef24eb81458f0f38633d2d96"
+    },
+    {
+      "sequence": 11,
+      "hash": "42a65416509cb1a47276cb300b47b446630faa57",
+      "shortHash": "42a6541",
+      "parents": [
+        "6d4dcc5ece28ecb2ef24eb81458f0f38633d2d96"
+      ],
+      "authorName": "Kacper",
+      "authorEmail": "kulak@kulak.at",
+      "authorDate": "2026-05-04T10:51:44+01:00",
+      "commitDate": "2026-05-04T10:51:44+01:00",
+      "subject": "fix: wa-sqlite initialisation fix (#210)",
+      "refs": "",
+      "additions": 32,
+      "deletions": 57,
+      "filesChanged": 7,
+      "files": [
+        ".changeset/slimy-toys-wear.md",
+        "esbuild.config.mjs",
+        "src/modules/database/sqlocal/databaseProvider.ts",
+        "src/modules/database/sqlocal/sqlocalDatabaseProxy.ts",
+        "src/modules/database/sqlocal/sqlocalWorkerDatabase.ts",
+        "src/modules/explorer/database/__tests__/__mocks__/wa-sqlite-wasm-url.ts",
+        "src/modules/explorer/database/waSqliteMemoryDatabase.ts"
+      ],
+      "githubUrl": "https://github.com/h-sphere/sql-seal/commit/42a65416509cb1a47276cb300b47b446630faa57"
+    },
+    {
+      "sequence": 12,
+      "hash": "8972c9c7f428109a661c6dfa8bd2f90167b55e68",
+      "shortHash": "8972c9c",
+      "parents": [
+        "42a65416509cb1a47276cb300b47b446630faa57"
+      ],
+      "authorName": "github-actions[bot]",
+      "authorEmail": "41898282+github-actions[bot]@users.noreply.github.com",
+      "authorDate": "2026-05-04T10:52:55+01:00",
+      "commitDate": "2026-05-04T10:52:55+01:00",
+      "subject": "release: Release 0.40.1 (#211)",
+      "refs": "tag: 0.40.1, upstream/main, upstream/HEAD",
+      "additions": 10,
+      "deletions": 8,
+      "filesChanged": 5,
+      "files": [
+        ".changeset/slimy-toys-wear.md",
+        "CHANGELOG.md",
+        "manifest.json",
+        "package.json",
+        "versions.json"
+      ],
+      "githubUrl": "https://github.com/h-sphere/sql-seal/commit/8972c9c7f428109a661c6dfa8bd2f90167b55e68"
+    }
+  ]
+}
