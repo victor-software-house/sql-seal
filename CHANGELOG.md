@@ -1,5 +1,11 @@
 # Releases
 
+## 0.42.2 (Fork)
+
+- fix: run `/sqlseal/query` requests through the full SQLSeal codeblock pipeline
+- fix: support `TABLE ... = file(...)`, renderer selection, `TEMPLATE` includes, table alias transformation, and file/frontmatter bind variables in the Local REST API endpoint
+- test: add SQLSeal REST API fixtures covering plain SQL and CSV-backed TEMPLATE blocks
+
 ## 0.40.0 (Fork)
 
 - feat: replaced Handlebars with Nunjucks in the TEMPLATE renderer

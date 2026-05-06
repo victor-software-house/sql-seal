@@ -71,6 +71,7 @@ export const mainModule = new Registrator()
 .link('api.cellParser', 'syntaxHighlight.cellParser')
 .link('api.db', 'db.db')
 .link('api.rendererRegistry', 'editor.rendererRegistry')
+.link('api.sync', 'sync.syncBus')
 
 .link('globalTables.app', 'obsidian.app')
 .link('globalTables.plugin', 'obsidian.plugin')
@@ -84,4 +85,3 @@ export const mainModule = new Registrator()
 .link('explorer.sync', 'sync.syncBus')
 .link('explorer.rendererRegistry', 'editor.rendererRegistry')
 .link('explorer.settings', 'settings.settings')
-

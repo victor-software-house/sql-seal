@@ -4,6 +4,7 @@ import { Plugin } from "obsidian";
 import { SqlSealDatabase } from "../database/database";
 import { RendererRegistry } from "../editor/renderer/rendererRegistry";
 import { ModernCellParser } from "../syntaxHighlight/cellParser/ModernCellParser";
+import { Sync } from "../sync/sync/sync";
 
 
 export const apiModule = new Registrator()
@@ -11,5 +12,6 @@ export const apiModule = new Registrator()
     .import<'cellParser', Promise<ModernCellParser>>()
     .import<'db', Promise<SqlSealDatabase>>()
     .import<'rendererRegistry', RendererRegistry>()
-    .register('init', db => db.fn(apiInit).inject('plugin', 'cellParser', 'rendererRegistry', 'db'))
+    .import<'sync', Promise<Sync>>()
+    .register('init', db => db.fn(apiInit).inject('plugin', 'cellParser', 'rendererRegistry', 'db', 'sync'))
     .export('init')
