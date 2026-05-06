@@ -32,20 +32,30 @@ Decision:
 - Do not implement background materialization or write generated output back to
   vault files for this plan.
 
-Implementation checkpoint:
+Implementation sequence:
 
-1. Extend renderer context with `app` and lifecycle component support.
-2. Allow renderer `render(...)` to be async and await it from the codeblock
+1. Baseline current behavior in tests before changing the renderer pipeline.
+   Cover the parser, current `MARKDOWN` behavior, and `/sqlseal/query` response
+   shape so regressions are explicit.
+2. Extend renderer context with `app` and lifecycle component support.
+3. Allow renderer `render(...)` to be async and await it from the codeblock
    processor and REST endpoint.
-3. Replace `src/modules/editor/renderer/MarkdownRenderer.ts` with a
+4. Replace `src/modules/editor/renderer/MarkdownRenderer.ts` with a
    Nunjucks-backed markdown renderer using `MarkdownRenderer.render(...)`.
-4. Add a nested `sqlseal` fence guard with a clear renderer error.
-5. Keep compatibility fallback for `MARKDOWN` without a template body by
+5. Add a nested `sqlseal` fence guard with a clear renderer error.
+6. Keep compatibility fallback for `MARKDOWN` without a template body by
    generating a markdown table and rendering it through Obsidian.
-6. Update docs and changelog when implemented.
+7. Tighten REST rendering so `/sqlseal/query` awaits renderer output and returns
+   the rendered `html` for `MARKDOWN` blocks.
+8. Validate through the Obsidian vault query helper against real SQLSeal blocks,
+   not only Jest mocks.
+9. Update docs and changelog when implemented.
+10. Release with a patch-level version bump only, then tag and publish the BRAT
+    assets.
 
 Required tests:
 
+- Parser accepts the new multi-line `MARKDOWN` template form.
 - `MARKDOWN` calls Obsidian `MarkdownRenderer.render(...)`.
 - Template context includes `data`, `columns`, and `properties`.
 - No-template fallback is rendered by Obsidian, not inserted as raw text.
@@ -53,6 +63,18 @@ Required tests:
 - `/sqlseal/query` returns rendered `html` for `MARKDOWN` blocks.
 - Lifecycle cleanup is attached to the SQLSeal codeblock processor or REST
   rendering component.
+
+Verification and release:
+
+1. Run `pnpm run typecheck`.
+2. Run `pnpm test --runInBand`.
+3. Run `pnpm run build`.
+4. Use the Obsidian vault query helper to render at least one real `MARKDOWN`
+   block and one existing `TEMPLATE` block.
+5. Bump the version at patch level only.
+6. Commit and push the implementation.
+7. Create the release tag and GitHub release with `main.js`, `manifest.json`,
+   and `styles.css` so BRAT can update the plugin on restart.
 
 ## Archived Plans
 

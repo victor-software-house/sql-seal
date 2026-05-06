@@ -37,6 +37,24 @@ CI runs both on every pull request to `main` (see `.github/workflows/test.yml`).
 
 ---
 
+## Release Requirements
+
+This fork is distributed through BRAT from `victor-software-house/sql-seal`.
+Release work must leave a GitHub release with the built plugin assets attached.
+
+- Always bump at patch level only unless the user explicitly requests a
+  different semantic version change in the current task.
+- Use `pnpm pkg set version=<next-patch> && pnpm run version` so
+  `package.json`, `manifest.json`, and `versions.json` stay aligned.
+- Update `CHANGELOG.md` for user-visible behavior changes before tagging.
+- Run `pnpm run typecheck`, `pnpm test --runInBand`, and `pnpm run build`
+  before publishing a code release.
+- Commit and push the release changes before creating the tag or GitHub release.
+- Attach `main.js`, `manifest.json`, and `styles.css` to the GitHub release so
+  BRAT can update installed vaults on restart.
+
+---
+
 ## Architecture Reference
 
 ### Module Map
