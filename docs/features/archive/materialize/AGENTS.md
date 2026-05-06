@@ -1,6 +1,8 @@
-# AGENTS — MATERIALIZE Feature
+# AGENTS — Archived MATERIALIZE Feature
 
-Context for AI agents working on the MATERIALIZE mode implementation.
+Archived context for the old MATERIALIZE mode plan. This subtree is retained
+for historical reference only. Do not use it as the active implementation plan;
+use `docs/features/native-markdown-renderer/README.md` instead.
 
 ---
 

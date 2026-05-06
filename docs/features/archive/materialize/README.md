@@ -1,4 +1,15 @@
-# Feature: MATERIALIZE Mode
+# Archived Plan: MATERIALIZE Mode
+
+Status: archived. Do not implement this plan unless it is deliberately revived
+by a newer decision record.
+
+This plan was superseded by the native Obsidian-rendered `MARKDOWN` renderer
+plan in `docs/features/native-markdown-renderer/README.md`. The materialization
+approach writes generated output back into vault files; the active direction is
+in-memory rendering through Obsidian's markdown engine with no background file
+mutation.
+
+## Historical Plan
 
 Comment-stored queries with native markdown output. Eliminates the codeblock in favor of HTML comment markers, producing real wikilinks and agent-readable content.
 
