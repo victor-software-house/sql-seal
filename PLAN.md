@@ -4,7 +4,62 @@ This file is the root implementation plan checkpoint for the fork. Keep it
 small, current, and decision-oriented. Detailed feature plans may live under
 `docs/features/`, but this file records which plan is active.
 
-## Active Plan: Native MARKDOWN Renderer
+## Active Roadmap
+
+This fork should move in small, reviewable phases. Do not rebase or merge
+upstream wholesale; upstream changes are selectively adopted into the fork after
+tests prove the local behavior.
+
+Primary evidence:
+
+- Native markdown renderer design:
+  `docs/features/native-markdown-renderer/README.md`
+- Upstream hiatus analysis:
+  `docs/reports/upstream-hiatus-2026-05-06/README.md`
+- Release rules:
+  `AGENTS.md`
+
+## Completed Prep
+
+These items are already done and should be preserved while implementing the next
+phases:
+
+1. Root repo planning exists in this file.
+2. The materialization plan is archived under
+   `docs/features/archive/materialize/` and must not be revived without a new
+   explicit decision.
+3. SQLSeal Local REST API requests run through the codeblock parser pipeline,
+   including `TABLE ... = file(...)`, table alias rewriting, file/frontmatter
+   bind variables, and renderer selection.
+4. The fork has a Changesets release lane with human-gated release PRs.
+5. Release workflow gates run `release:guard`, typecheck, Jest, and production
+   build before opening/updating a release PR or publishing a merged release.
+6. Patch is the default bump level. Consecutive `minor` or consecutive `major`
+   releases require a reviewed
+   `.changeset/allow-consecutive-nonpatch.json` override.
+7. Upstream `h-sphere/sql-seal` was fetched and analyzed through upstream
+   `0.40.1` / `8972c9c`.
+
+## Phase 1: Upstream Safety Prep
+
+Goal: adopt low-risk upstream fixes that reduce parser/editor risk before the
+native `MARKDOWN` rewrite.
+
+1. Port upstream parser `SELECT` boundary fix from `03dfcd7`.
+   - Keep the fork's `nunjucksTemplate` grammar.
+   - Add fork-specific parser tests for `SELECT` or `WITH` appearing inside
+     renderer config and templates.
+   - Confirm upcoming multi-line `MARKDOWN` templates parse correctly.
+2. Port task raw `status` column from `c856713`.
+   - Add sync table tests for `/`, `-`, space, and `x` task states.
+   - Preserve existing `completed` and interactive `checkbox` behavior.
+3. Consider callout syntax highlighting fix from `d9cb4d5`.
+   - Adopt only if the upstream extraction helper ports cleanly.
+   - Keep it separate from runtime renderer changes.
+
+Release as a patch unless the user explicitly approves otherwise.
+
+## Phase 2: Native MARKDOWN Renderer
 
 Source of truth: `docs/features/native-markdown-renderer/README.md`
 
@@ -71,10 +126,73 @@ Verification and release:
 3. Run `pnpm run build`.
 4. Use the Obsidian vault query helper to render at least one real `MARKDOWN`
    block and one existing `TEMPLATE` block.
-5. Bump the version at patch level only.
+5. Add a patch changeset.
 6. Commit and push the implementation.
-7. Create the release tag and GitHub release with `main.js`, `manifest.json`,
-   and `styles.css` so BRAT can update the plugin on restart.
+7. Let the release workflow open or update the Changesets release PR.
+8. Publish only by merging the release PR, unless the user explicitly requests
+   the documented emergency release path.
+
+## Phase 3: Upstream Query and Data Features
+
+Goal: integrate upstream features that are useful to this fork without pulling
+the upstream renderer or release model back in.
+
+1. Port `TAGS()` macro and multi-tag `AND` auto-detection from `c038366`.
+   - Add tests around aliases, table remapping, `@param` bindings, and mixed
+     conditions.
+   - Decide explicitly whether auto-detection is enabled by default in this
+     fork.
+   - Prefer reimplementing the idea against the fork's transformer tests over a
+     blind cherry-pick.
+2. Evaluate JSONL / NDJSON support from `fc24a4f`.
+   - Defer until a real vault workflow needs append-only structured data.
+   - If adopted, include settings UI, sync strategy tests, and helper
+     validation.
+3. Selectively adopt production log suppression from `b852977` / `33e19df`.
+   - Avoid backend-specific config changes until the database migration phase.
+
+Release each coherent adoption as a patch unless the user explicitly approves a
+larger bump.
+
+## Phase 4: Database Backend Evaluation
+
+Goal: evaluate upstream's `wa-sqlite` migration without destabilizing current
+vault workflows.
+
+Upstream commits: `bf085fe`, `33e19df`, `42a6541`, releases `6d4dcc5` and
+`8972c9c`.
+
+Rules:
+
+1. Use a dedicated migration branch.
+2. Do not combine this with renderer, REST, or upstream query-feature work.
+3. Baseline current database, sync, explorer, and REST behavior with tests
+   before changing the backend.
+4. Port the upstream mobile/init fixes with the migration, not later.
+5. Verify with:
+   - `pnpm run release:guard`
+   - `pnpm run typecheck`
+   - `pnpm test --runInBand`
+   - `pnpm run build`
+   - SQLSeal REST helper against real vault fixtures
+   - Obsidian smoke test for CSV-backed tables, global `files`/`tasks` tables,
+     `.sql`/`.sqlseal` explorer files, and BRAT-built assets.
+
+Decision checkpoint: keep `wa-sqlite` only if it preserves existing fork
+features and materially improves maintenance, mobile behavior, or reliability.
+
+## Release Discipline
+
+Every implementation phase should use the normal gated release path:
+
+1. Add one `.changeset/*.md` file per user-visible change.
+2. Default the bump to `patch`.
+3. Run `pnpm run release:guard` before pushing.
+4. Push the implementation branch or `main` change.
+5. Let GitHub Actions open/update the release PR.
+6. Human reviews and merges the release PR.
+7. The next release workflow run tags and publishes `main.js`,
+   `manifest.json`, and `styles.css` for BRAT.
 
 ## Archived Plans
 
