@@ -1,4 +1,6 @@
 import { executeSqlSealRequest } from "./restApi";
+import { MarkdownRenderer } from "../editor/renderer/MarkdownRenderer";
+import { RendererRegistry } from "../editor/renderer/rendererRegistry";
 import {
 	dailyLedgerFile,
 	plainSqlQuery,
@@ -64,6 +66,9 @@ function createDocument() {
 	return {
 		createElement: jest.fn(() => ({
 			innerHTML: "",
+			empty: jest.fn(function(this: { innerHTML: string }) {
+				this.innerHTML = "";
+			}),
 		})),
 	};
 }
@@ -179,6 +184,44 @@ describe("SQLSeal REST API execution", () => {
 			renderer: "template",
 			transformedQuery: transformedSdlcTemplateQuery,
 			mappedTables: ["file_gitlab_notes", "file_jira_events"],
+		}));
+	});
+
+	it("returns Obsidian-rendered html for MARKDOWN template blocks", async () => {
+		const db = {
+			select: jest.fn(async () => ({
+				columns: ["note"],
+				data: [{ note: "EVO-6703" }],
+			})),
+		};
+		const rendererRegistry = new RendererRegistry();
+		rendererRegistry.register(
+			"sql-seal-internal-markdown",
+			new MarkdownRenderer({} as any),
+		);
+
+		const response = await executeSqlSealRequest({
+			app: createApp() as any,
+			db: db as any,
+			cellParser: { renderAsString: (data: Record<string, unknown>[]) => data } as any,
+			rendererRegistry,
+			sync: createSync() as any,
+			query: [
+				"MARKDOWN",
+				"## {{ properties.title }}",
+				"{% for row in data %}",
+				"- {{ row.note }}",
+				"{% endfor %}",
+				"",
+				"SELECT note FROM files",
+			].join("\n"),
+			file: dailyLedgerFile.path,
+			variables: {},
+		});
+
+		expect(response).toEqual(expect.objectContaining({
+			html: "## 2026-05-06\n\n- EVO-6703\n",
+			renderer: "markdown",
 		}));
 	});
 });

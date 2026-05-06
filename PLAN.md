@@ -43,6 +43,12 @@ phases:
    - parser `SELECT` / `WITH` boundary fix from `03dfcd7`
    - raw task `status` column from `c856713`
    - callout syntax highlighting restoration from `d9cb4d5`
+9. Phase 2 native `MARKDOWN` renderer was implemented:
+   - multi-line Nunjucks-backed `MARKDOWN`
+   - Obsidian `MarkdownRenderer.render(...)` output path
+   - fallback markdown table rendered through Obsidian
+   - nested `sqlseal` fence guard
+   - REST endpoint awaits rendered `html`
 
 ## Phase 1: Upstream Safety Prep
 
@@ -69,6 +75,9 @@ Release as a patch unless the user explicitly approves otherwise.
 ## Phase 2: Native MARKDOWN Renderer
 
 Source of truth: `docs/features/native-markdown-renderer/README.md`
+
+Status: implemented. Keep this section as the behavior contract and regression
+checklist for future renderer work.
 
 Goal: replace the current `MARKDOWN` renderer behavior with native
 Obsidian-rendered markdown.

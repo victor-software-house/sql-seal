@@ -17,15 +17,11 @@ LIMIT 10
 HTML render method does not come with any extra options (for now).
 
 ## Markdown
-Current status: deprecated raw-text behavior.
+Current status: native Obsidian-rendered markdown.
 
-You can display query results as a text based markdown table. This can be useful
-for copy/export, but Obsidian does not parse the generated markdown in the
-current implementation.
-
-The active fork plan is to replace `MARKDOWN` with Nunjucks-generated markdown
-rendered by Obsidian's own markdown engine. See the repository root `PLAN.md`
-and `docs/features/native-markdown-renderer/README.md`.
+You can render query results as generated markdown. `MARKDOWN` uses Nunjucks for
+the template body, then hands the generated markdown to Obsidian's own markdown
+renderer.
 
 To use Markdown renderer, put `MARKDOWN` above your `SELECT` query like:
 
@@ -33,11 +29,16 @@ To use Markdown renderer, put `MARKDOWN` above your `SELECT` query like:
 TABLE data = file(./data.csv)
 
 MARKDOWN
-SELECT * FROM data
+{% for row in data %}
+- {{ row.name }} — {{ row.value }}
+{% endfor %}
+
+SELECT name, value FROM data
 LIMIT 10
 ```
 
-The deprecated renderer does not come with any extra options.
+If no template body is provided, SQLSeal falls back to a generated markdown
+table and still renders that table through Obsidian.
 
 ![Markdown Renderer Example](./renderer_markdown.png)
 

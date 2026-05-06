@@ -1,4 +1,4 @@
-import { App, Plugin } from "obsidian";
+import { App, Component, Plugin } from "obsidian";
 import { SqlSealDatabase } from "../database/database";
 import { ModernCellParser } from "../../modules/syntaxHighlight/cellParser/ModernCellParser";
 import { ParseResults } from "../../modules/syntaxHighlight/cellParser/parseResults";
@@ -46,7 +46,8 @@ function markdownTable(columns: string[], rows: Record<string, unknown>[]): stri
 	return [header, sep, ...body].join("\n");
 }
 
-function renderHtml(
+async function renderHtml(
+	app: App,
 	rendererRegistry: RendererRegistry,
 	renderer: ParserResult["renderer"],
 	cellParser: ModernCellParser,
@@ -55,18 +56,21 @@ function renderHtml(
 	columns: string[],
 	flags: ParserResult["flags"],
 	frontmatter: Record<string, unknown>,
-): string {
+): Promise<string> {
 	const el = document.createElement("div");
+	const component = new Component();
+	component.load();
 	const render = rendererRegistry.prepareRender(
 		renderer.type.toLowerCase(),
 		renderer.options,
-	)(el, { cellParser, sourcePath });
+	)(el, { cellParser, sourcePath, component });
 
 	try {
-		render.render({ data, columns, flags, frontmatter });
+		await render.render({ data, columns, flags, frontmatter });
 		return el.innerHTML;
 	} finally {
 		render.cleanup?.();
+		component.unload();
 	}
 }
 
@@ -166,7 +170,8 @@ export async function executeSqlSealRequest({
 		columns,
 		data: rendered,
 		markdown: markdownTable(columns, rendered),
-		html: renderHtml(
+		html: await renderHtml(
+			app,
 			rendererRegistry,
 			parsed.renderer,
 			cellParser,

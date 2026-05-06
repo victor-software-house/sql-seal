@@ -102,14 +102,15 @@ Release work must leave a GitHub release with the built plugin assets attached.
 7. Results passed to renderer with `{ data, columns, frontmatter }`
 8. For TEMPLATE: Nunjucks compiles template string, renders with `{ data, columns, properties }`
 
-### Active Renderer Plan
+### MARKDOWN Renderer
 
-The current `MARKDOWN` renderer is deprecated raw-text table output. The active
-plan is to replace it with native Obsidian-rendered markdown using Nunjucks and
-`MarkdownRenderer.render(...)`. See `PLAN.md` and
-`docs/features/native-markdown-renderer/README.md`. Do not revive the archived
-materialization plan under `docs/features/archive/materialize/` unless a newer
-decision explicitly says so.
+`MARKDOWN` renders Nunjucks-generated markdown through Obsidian's native
+`MarkdownRenderer.render(...)`. It is multi-line like `TEMPLATE`, receives
+`{ data, columns, properties }`, and rejects nested `sqlseal` fenced codeblocks.
+Without a template body, it falls back to a generated markdown table that is
+still rendered by Obsidian. Do not revive the archived materialization plan
+under `docs/features/archive/materialize/` unless a newer decision explicitly
+says so.
 
 ### Global Tables Schema
 

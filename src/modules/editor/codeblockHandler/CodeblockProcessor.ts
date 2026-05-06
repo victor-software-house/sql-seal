@@ -97,6 +97,7 @@ export class CodeblockProcessor extends MarkdownRenderChild {
 			)(rendererEl, {
 				cellParser: this.cellParser,
 				sourcePath: this.sourceKey,
+				component: this,
 			});
 
 			// FIXME: probably should save the one before transform and perform transform every time we execute it.
@@ -164,7 +165,7 @@ export class CodeblockProcessor extends MarkdownRenderChild {
 				transformedQuery,
 				variables,
 			))!; // FIXME: check this
-			this.renderer.render({
+			await this.renderer.render({
 				data,
 				columns,
 				flags: this.flags,

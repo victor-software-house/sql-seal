@@ -70,7 +70,7 @@ export const editorInit = (
 		);
 		rendererRegistry.register(
 			"sql-seal-internal-markdown",
-			new MarkdownRenderer(app),
+			new MarkdownRenderer(app, vaultLoader),
 		);
 		rendererRegistry.register("sql-seal-internal-list", new ListRenderer(app));
 		rendererRegistry.register(

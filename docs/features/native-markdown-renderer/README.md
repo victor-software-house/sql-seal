@@ -1,6 +1,6 @@
 # Native MARKDOWN Renderer Plan
 
-Status: active implementation plan.
+Status: implemented behavior contract.
 
 The `MARKDOWN` renderer should mean "render generated markdown with Obsidian's
 own markdown engine." It should no longer mean "show a raw ASCII markdown table
@@ -106,8 +106,7 @@ renderer:
 interface RendererContext {
   cellParser?: ModernCellParser;
   sourcePath: string;
-  app: App;
-  component: Component;
+  component?: Component;
 }
 ```
 
@@ -118,7 +117,6 @@ itself as the render component:
 this.rendererRegistry.prepareRender(type, options)(rendererEl, {
   cellParser: this.cellParser,
   sourcePath: this.sourceKey,
-  app: this.app,
   component: this,
 });
 ```

@@ -1,20 +1,36 @@
 # Markdown Renderer
-Status: deprecated current behavior.
+Status: native Obsidian-rendered markdown.
 
-The current `MARKDOWN` renderer displays a raw text markdown table. It can be
-helpful for copy/export, but Obsidian does not parse the generated markdown, so
-links, tables, headings, callouts, and embeds do not behave like normal
-Obsidian-rendered markdown.
+The `MARKDOWN` renderer generates markdown with Nunjucks, then passes it through
+Obsidian's own markdown renderer. Links, tables, headings, callouts, and embeds
+behave like normal Obsidian-rendered markdown.
 
-This behavior is planned to be replaced by native Obsidian-rendered markdown.
-See the repository root `PLAN.md` and
-`docs/features/native-markdown-renderer/README.md`.
+The template context matches `TEMPLATE`: `data`, `columns`, and `properties`.
+Directives such as `missing='—'` and `blank='—'` are supported before the
+template body.
 
 ```sqlseal
+MARKDOWN
+missing='—'
+## {{ properties.title }}
 
+{% for row in data %}
+- **{{ row.note }}:** {{ row.status }}
+{% endfor %}
+
+SELECT note, status
+FROM tasks
+WHERE path = @path
+```
+
+If no template body is provided, SQLSeal generates a markdown table and renders
+that table through Obsidian:
+
+```sqlseal
 MARKDOWN
 SELECT * FROM files LIMIT 10
 ```
 
-Please note that functions like `img` and `a` do not work well with the current
-deprecated renderer because the output is inserted as raw text.
+Generated markdown cannot include nested `sqlseal` fenced codeblocks. Use
+`sql`, `md`, or escaped fences when documenting examples inside `MARKDOWN`
+output.

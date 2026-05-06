@@ -4,9 +4,9 @@
 
 Private fork of [h-sphere/sql-seal](https://github.com/h-sphere/sql-seal). Obsidian plugin for running SQL queries against vault metadata with Nunjucks template rendering.
 
-**Fork changes from upstream:** Nunjucks replaces Handlebars for TEMPLATE mode, `links` global table, `parent`/`depth` columns on `files` table, custom Nunjucks filters (`groupby`, `unique`), VaultLoader for `{% include %}` of `.njk` files.
+**Fork changes from upstream:** Nunjucks replaces Handlebars for TEMPLATE mode, native Obsidian-rendered `MARKDOWN` mode, `links` global table, `parent`/`depth` columns on `files` table, custom Nunjucks filters (`groupby`, `unique`), VaultLoader for `{% include %}` of `.njk` files.
 
-**Current fork plan:** replace the deprecated raw-text `MARKDOWN` renderer with native Obsidian-rendered markdown. See [PLAN.md](./PLAN.md).
+**Current fork plan:** selectively integrate useful upstream query/data improvements after the native `MARKDOWN` renderer. See [PLAN.md](./PLAN.md).
 
 ## Installation
 
@@ -35,7 +35,7 @@ Four tables are automatically populated from vault metadata:
 | `files` | `path`, `name`, `parent`, `depth`, frontmatter fields | `id`, `name`, `path`, `parent` |
 | `tags` | `tag`, `path` | `tag`, `fileId`, `path` |
 | `links` | `path` (source), `target` (resolved), `display_text`, `target_exists` | `path`, `target` |
-| `tasks` | `path`, `task`, `completed`, `heading` | `filePath` |
+| `tasks` | `path`, `task`, `completed`, `status`, `heading` | `filePath` |
 
 The `files` table dynamically adds columns for every frontmatter field encountered in the vault.
 
@@ -101,7 +101,7 @@ ORDER BY note_type, name
 |:-----|:---------|
 | `TEMPLATE` | Full control via Nunjucks templates (preferred) |
 | `GRID` | Sortable, paginated ag-grid tables |
-| `MARKDOWN` | Deprecated raw-text table output; planned replacement is native Obsidian-rendered markdown |
+| `MARKDOWN` | Nunjucks-generated markdown rendered by Obsidian's markdown engine |
 | `LIST` | Simple `ul`/`li` elements |
 | `HTML` | Basic HTML table |
 

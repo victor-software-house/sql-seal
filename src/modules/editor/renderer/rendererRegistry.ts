@@ -1,3 +1,4 @@
+import { Component } from "obsidian";
 import { ModernCellParser } from "../../syntaxHighlight/cellParser/ModernCellParser";
 import { ViewDefinition } from "../parser";
 
@@ -8,11 +9,12 @@ export interface DataFormat {
 
 export interface RendererContext {
     cellParser?: ModernCellParser,
-    sourcePath: string
+    sourcePath: string,
+    component?: Component
 }
 
 export interface RenderReturn {
-    render: (data: any) => void;
+    render: (data: any) => void | Promise<void>;
     error: (errorMessage: string) => void;
     cleanup?: () => void;
 }
