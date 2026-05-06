@@ -51,6 +51,11 @@ Release work must leave a GitHub release with the built plugin assets attached.
   unless the user explicitly requests an emergency release path.
 - Always bump at patch level only unless the user explicitly requests a
   different semantic version change in the current task.
+- Consecutive `minor` or consecutive `major` releases are blocked by
+  `pnpm run release:guard`. The only override is a tracked
+  `.changeset/allow-consecutive-nonpatch.json` file whose version/type fields
+  exactly match the guard output and whose `approvedBy` / `reason` document
+  explicit human consent for that release PR.
 - Use `pnpm pkg set version=<next-patch> && pnpm run version` so
   `package.json`, `manifest.json`, and `versions.json` stay aligned for manual
   emergency releases. In the normal automated path, `pnpm run ci:version`

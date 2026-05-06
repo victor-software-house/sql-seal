@@ -183,6 +183,11 @@ merge, `release.yml` opens or updates the release PR with the version bump,
 the human release gate; the next `main` run tags the version and publishes the
 GitHub release with `main.js`, `manifest.json`, and `styles.css` for BRAT.
 
+`pnpm run release:guard` blocks accidental consecutive `minor` or consecutive
+`major` releases. A deliberate override must be reviewed in git as
+`.changeset/allow-consecutive-nonpatch.json` with exact version/type fields,
+`approvedBy`, and a concrete reason.
+
 ## Disclaimer
 
 The plugin authors do not take any responsibility for any potential data loss. Always backup your files before usage. This plugin may modify files in your vault in the following situations (the list might not be exhaustive):

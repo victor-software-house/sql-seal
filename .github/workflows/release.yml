@@ -39,6 +39,7 @@ jobs:
 
       - name: Pre-release gates
         run: |
+          pnpm run release:guard
           pnpm run typecheck
           pnpm test --runInBand
           pnpm run build

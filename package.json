@@ -7,6 +7,7 @@
     "dev": "node esbuild.config.mjs",
     "typecheck": "tsc -noEmit -skipLibCheck",
     "build": "node --no-warnings esbuild.config.mjs production",
+    "release:guard": "node scripts/guard-release-bump.mjs",
     "version": "node version-bump.mjs && git add manifest.json versions.json",
     "rebuild": "electron-rebuild -f -w better-sqlite3",
     "release": "pnpm run build && changeset publish",
