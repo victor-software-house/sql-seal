@@ -46,6 +46,7 @@ Tasks table consists of the following columns:
 | --------------- |--------------------------------------------------------------------------------------------------------------------------| ------------- |
 | `task`          | Content of the task (text)                                                                                               |               |
 | `completed`     | 0 if not completed, 1 if completed                                                                                       |               |
+| `status`        | Raw checkbox character (` ` for unchecked, `x` for completed, `/`, `-`, etc. for custom statuses)                       | fork          |
 | `path`          | Full path of the file the tag belongs to                                                                                 | 0.24.1        |
 | `filePath`      | (deprecated) same like `path`. Name changed for compatibility with other tables. Will get removed in the future versions |               |
 | `checkbox`      | Interactive checkbox for the task that can be clicked to toggle completion state                                         | 0.29.0        |
@@ -89,4 +90,3 @@ SELECT a(path) FROM links
 WHERE target = @path
 AND json_extract(position, '$.frontmatterKey') = 'type'
 ```
-

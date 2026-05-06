@@ -11,7 +11,8 @@ interface CheckboxProps {
         line: number,
         lineContent: string
     },
-    task: string
+    task: string,
+    status?: string
 }
 
 const isCheckboxProp = (arg: any): arg is CheckboxProps => {
@@ -32,7 +33,7 @@ export class CheckboxParser implements CellFunction<Args> {
 
     prepare(values: Args): CellParserResult {
         if (!isCheckboxProp(values)) {
-            const el = createEl('input', {
+            const el = this.create('input', {
                 type: 'checkbox',
                 attr: {
                     disabled: true,
@@ -42,10 +43,11 @@ export class CheckboxParser implements CellFunction<Args> {
             return el
         }
 
-        const el = createEl('input', {
+        const el = this.create('input', {
             type: 'checkbox',
             attr: {
-                checked: !!(values && values.checked) ? true : null
+                checked: !!(values && values.checked) ? true : null,
+                'data-task': values.status || ' '
             }
         })
 
@@ -73,12 +75,15 @@ export class CheckboxParser implements CellFunction<Args> {
                         // Get the line containing the task
                         const lineIndex = values.position?.line
                         if (lineIndex >= 0 && lineIndex < lines.length) {
+                            const currentStatus = values.status || (values.checked ? 'x' : ' ')
+                            const nextStatus = el.checked ? 'x' : ' '
+                            const escapedStatus = currentStatus.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
                             // Update the task status
-                            if (el.checked) {
-                                lines[lineIndex] = lines[lineIndex].replace('- [ ]', '- [x]')
-                            } else {
-                                lines[lineIndex] = lines[lineIndex].replace('- [x]', '- [ ]')
-                            }
+                            lines[lineIndex] = lines[lineIndex].replace(
+                                new RegExp(`\\[${escapedStatus}\\]`),
+                                `[${nextStatus}]`
+                            )
 
                             // Write back to the file
                             await this.app.vault.modify(file, lines.join('\n'))
@@ -98,10 +103,14 @@ export class CheckboxParser implements CellFunction<Args> {
             }
             return '[ ]'
         } else {
+            if (values.status) {
+                return `[${values.status}]`
+            }
+
             if (values.checked) {
                 return '[x]'
             } else {
-                return '[ ] '
+                return '[ ]'
             }
         }
     }

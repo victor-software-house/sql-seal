@@ -163,6 +163,7 @@ Checkbox items from markdown files.
 | `filePath` | File path (same as path) |
 | `task` | Task text content |
 | `completed` | 1 if checked, 0 if not |
+| `status` | Raw checkbox character (` `, `x`, `/`, `-`, etc.) |
 | `position` | Line number |
 | `heading` | Parent heading text |
 | `heading_level` | Parent heading level |

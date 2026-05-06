@@ -217,6 +217,78 @@ SELECT * FROM x`, DEFAULT_VIEWS)).toEqual({
         })
     })
 
+    it('should not treat select or with prefixes in renderer config as the SQL query boundary', () => {
+        expect(parse(`
+            GRID {
+                selectedMode: true,
+                selectAll: false,
+                withAnimation: true,
+                withoutTotals: false
+            }
+            SELECT * FROM files`, DEFAULT_VIEWS)).toEqual({
+            flags: {},
+            query: 'SELECT * FROM files',
+            renderer: {
+                type: 'GRID',
+                options: `{
+                selectedMode: true,
+                selectAll: false,
+                withAnimation: true,
+                withoutTotals: false
+            }`,
+            },
+            tables: []
+        })
+    })
+
+    it('should allow select and with as config keys when they are not followed by whitespace', () => {
+        expect(parse(`
+            GRID {
+                select: 4,
+                with: 'value'
+            }
+            SELECT * FROM files`, DEFAULT_VIEWS)).toEqual({
+            flags: {},
+            query: 'SELECT * FROM files',
+            renderer: {
+                type: 'GRID',
+                options: `{
+                select: 4,
+                with: 'value'
+            }`,
+            },
+            tables: []
+        })
+    })
+
+    it('should parse a future multi-line MARKDOWN template until the standalone SQL query', () => {
+        const views = DEFAULT_VIEWS.map(view => view.name === 'MARKDOWN'
+            ? { ...view, argument: 'nunjucksTemplate?', singleLine: false }
+            : view)
+
+        expect(parse(`
+            MARKDOWN
+            ## {{ properties.title }}
+
+            {% for row in data %}
+            - {{ row.note }} selectedMode
+            {% endfor %}
+
+            SELECT note FROM files`, views)).toEqual({
+            flags: {},
+            query: 'SELECT note FROM files',
+            renderer: {
+                type: 'MARKDOWN',
+                options: `## {{ properties.title }}
+
+            {% for row in data %}
+            - {{ row.note }} selectedMode
+            {% endfor %}`,
+            },
+            tables: []
+        })
+    })
+
     it('should allow for blank lines and weird formatting', () => {
         expect(parse(`
 
