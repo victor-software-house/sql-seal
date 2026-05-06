@@ -6,6 +6,8 @@ Private fork of [h-sphere/sql-seal](https://github.com/h-sphere/sql-seal). Obsid
 
 **Fork changes from upstream:** Nunjucks replaces Handlebars for TEMPLATE mode, `links` global table, `parent`/`depth` columns on `files` table, custom Nunjucks filters (`groupby`, `unique`), VaultLoader for `{% include %}` of `.njk` files.
 
+**Current fork plan:** replace the deprecated raw-text `MARKDOWN` renderer with native Obsidian-rendered markdown. See [PLAN.md](./PLAN.md).
+
 ## Installation
 
 Install via [BRAT](https://github.com/TfTHacker/obsidian42-brat) using repo `victor-software-house/sql-seal`.
@@ -99,7 +101,7 @@ ORDER BY note_type, name
 |:-----|:---------|
 | `TEMPLATE` | Full control via Nunjucks templates (preferred) |
 | `GRID` | Sortable, paginated ag-grid tables |
-| `MARKDOWN` | ASCII table output (copyable) |
+| `MARKDOWN` | Deprecated raw-text table output; planned replacement is native Obsidian-rendered markdown |
 | `LIST` | Simple `ul`/`li` elements |
 | `HTML` | Basic HTML table |
 

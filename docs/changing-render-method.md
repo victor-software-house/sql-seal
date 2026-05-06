@@ -17,7 +17,16 @@ LIMIT 10
 HTML render method does not come with any extra options (for now).
 
 ## Markdown
-You can display table as a text based markdown table. This can be useful if you want to use SQLSeal output as a static table in your document or if you just prefer text look of the table.
+Current status: deprecated raw-text behavior.
+
+You can display query results as a text based markdown table. This can be useful
+for copy/export, but Obsidian does not parse the generated markdown in the
+current implementation.
+
+The active fork plan is to replace `MARKDOWN` with Nunjucks-generated markdown
+rendered by Obsidian's own markdown engine. See the repository root `PLAN.md`
+and `docs/features/native-markdown-renderer/README.md`.
+
 To use Markdown renderer, put `MARKDOWN` above your `SELECT` query like:
 
 ```sqlseal
@@ -28,7 +37,7 @@ SELECT * FROM data
 LIMIT 10
 ```
 
-Markdown renderer method does not come with any extra options (for now).
+The deprecated renderer does not come with any extra options.
 
 ![Markdown Renderer Example](./renderer_markdown.png)
 

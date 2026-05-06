@@ -3,6 +3,7 @@
 Shared coding and review standards for all automation working on this repository.
 
 For project overview, installation, and usage, see [README.md](./README.md).
+For the active fork implementation direction, see [PLAN.md](./PLAN.md).
 
 ---
 
@@ -65,6 +66,15 @@ CI runs both on every pull request to `main` (see `.github/workflows/test.yml`).
 6. Query executed against WorkerDatabase
 7. Results passed to renderer with `{ data, columns, frontmatter }`
 8. For TEMPLATE: Nunjucks compiles template string, renders with `{ data, columns, properties }`
+
+### Active Renderer Plan
+
+The current `MARKDOWN` renderer is deprecated raw-text table output. The active
+plan is to replace it with native Obsidian-rendered markdown using Nunjucks and
+`MarkdownRenderer.render(...)`. See `PLAN.md` and
+`docs/features/native-markdown-renderer/README.md`. Do not revive the archived
+materialization plan under `docs/features/archive/materialize/` unless a newer
+decision explicitly says so.
 
 ### Global Tables Schema
 
