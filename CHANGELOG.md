@@ -1,12 +1,5 @@
 # Releases
 
-## Unreleased
-
-- fix: avoid treating `SELECT` / `WITH` prefixes inside renderer options or templates as the SQL query boundary
-- fix: restore editor syntax highlighting for `sqlseal` codeblocks inside Obsidian callouts
-- feat: expose raw task checkbox symbols through the `tasks.status` column and checkbox cell payload
-- feat: render `MARKDOWN` blocks through Obsidian's markdown engine with Nunjucks template support
-
 ## 0.42.2 (Fork)
 
 - fix: run `/sqlseal/query` requests through the full SQLSeal codeblock pipeline
