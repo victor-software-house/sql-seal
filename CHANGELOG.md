@@ -1,5 +1,13 @@
 # Releases
 
+## 0.42.3
+
+### Patch Changes
+
+- 79abf6c: Restore editor syntax highlighting for `sqlseal` codeblocks inside Obsidian callouts.
+- 734c522: Render `MARKDOWN` blocks through Obsidian's markdown engine with Nunjucks template support, REST-rendered HTML, and nested `sqlseal` fence protection.
+- 4d945dd: Port upstream-safe parser and task table fixes: renderer options no longer stop on `SELECT` / `WITH` prefixes, and task rows expose the raw checkbox `status` symbol.
+
 ## 0.42.2 (Fork)
 
 - fix: run `/sqlseal/query` requests through the full SQLSeal codeblock pipeline
