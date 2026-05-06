@@ -3,6 +3,7 @@
 ## Unreleased
 
 - fix: avoid treating `SELECT` / `WITH` prefixes inside renderer options or templates as the SQL query boundary
+- fix: restore editor syntax highlighting for `sqlseal` codeblocks inside Obsidian callouts
 - feat: expose raw task checkbox symbols through the `tasks.status` column and checkbox cell payload
 
 ## 0.42.2 (Fork)

@@ -39,8 +39,15 @@ phases:
    `.changeset/allow-consecutive-nonpatch.json` override.
 7. Upstream `h-sphere/sql-seal` was fetched and analyzed through upstream
    `0.40.1` / `8972c9c`.
+8. Phase 1 upstream safety prep was implemented:
+   - parser `SELECT` / `WITH` boundary fix from `03dfcd7`
+   - raw task `status` column from `c856713`
+   - callout syntax highlighting restoration from `d9cb4d5`
 
 ## Phase 1: Upstream Safety Prep
+
+Status: implemented. Keep this section as the checklist that explains what was
+ported before the native `MARKDOWN` rewrite.
 
 Goal: adopt low-risk upstream fixes that reduce parser/editor risk before the
 native `MARKDOWN` rewrite.
