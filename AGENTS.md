@@ -42,14 +42,26 @@ CI runs both on every pull request to `main` (see `.github/workflows/test.yml`).
 This fork is distributed through BRAT from `victor-software-house/sql-seal`.
 Release work must leave a GitHub release with the built plugin assets attached.
 
+- Use Changesets as the release source of truth. Feature/fix PRs that should
+  ship must include a `.changeset/*.md` file.
+- Releases are gated by explicit human intervention: the release workflow opens
+  or updates a version PR from pending changesets, and publishing happens only
+  after a human merges that release PR into `main`.
+- Do not publish directly from a feature PR, local workstation, or manual tag
+  unless the user explicitly requests an emergency release path.
 - Always bump at patch level only unless the user explicitly requests a
   different semantic version change in the current task.
 - Use `pnpm pkg set version=<next-patch> && pnpm run version` so
-  `package.json`, `manifest.json`, and `versions.json` stay aligned.
+  `package.json`, `manifest.json`, and `versions.json` stay aligned for manual
+  emergency releases. In the normal automated path, `pnpm run ci:version`
+  performs this alignment inside the Changesets release PR.
 - Update `CHANGELOG.md` for user-visible behavior changes before tagging.
 - Run `pnpm run typecheck`, `pnpm test --runInBand`, and `pnpm run build`
   before publishing a code release.
-- Commit and push the release changes before creating the tag or GitHub release.
+- The release workflow must run typecheck, tests, and production build before it
+  opens/updates the release PR or publishes the merged release.
+- Commit and push manual release changes before creating the tag or GitHub
+  release.
 - Attach `main.js`, `manifest.json`, and `styles.css` to the GitHub release so
   BRAT can update installed vaults on restart.
 

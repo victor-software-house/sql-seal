@@ -172,11 +172,16 @@ Output: `main.js`, `styles.css` in repo root. Copy to `.obsidian/plugins/sqlseal
 
 | Workflow | Trigger | Action |
 |:---------|:--------|:-------|
-| `test.yml` | Pull request to `main` | Runs `pnpm test` and `pnpm run typecheck` |
-| `release.yml` | Push to `main` | Builds, runs changesets action, tags and publishes GitHub release with `main.js`, `manifest.json`, `styles.css` |
+| `test.yml` | Pull request or push to `main` | Runs `pnpm test --runInBand` and `pnpm run typecheck` |
+| `release.yml` | Push to `main` or manual dispatch | Runs typecheck, tests, and production build, then opens/updates a Changesets release PR or publishes after that PR is merged |
 | `docs.yml` | Push to `main` | Builds VitePress docs and deploys to FTP |
 
-Releases use [changesets](https://github.com/changesets/changesets). Version bumps go through `pnpm run ci:version` and publishing through `scripts/tag-and-publish.sh`.
+Releases use [changesets](https://github.com/changesets/changesets). Feature
+and fix PRs that should ship include a `.changeset/*.md` file. After those PRs
+merge, `release.yml` opens or updates the release PR with the version bump,
+`CHANGELOG.md`, `manifest.json`, and `versions.json`. Merging that release PR is
+the human release gate; the next `main` run tags the version and publishes the
+GitHub release with `main.js`, `manifest.json`, and `styles.css` for BRAT.
 
 ## Disclaimer
 
