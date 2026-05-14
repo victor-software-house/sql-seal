@@ -14,6 +14,8 @@ Primary evidence:
 
 - Native markdown renderer design:
   `docs/features/native-markdown-renderer/README.md`
+- Nested frontmatter access (proposed):
+  `docs/features/nested-frontmatter-access/README.md`
 - Upstream hiatus analysis:
   `docs/reports/upstream-hiatus-2026-05-06/README.md`
 - Release rules:
