@@ -212,8 +212,11 @@ In Nunjucks templates: `{{ properties.path }}`, `{{ properties.parent }}`, etc.
 
 ## Commit Conventions
 
-- No assistant, model, or vendor names in commit messages or committed files
-- Validate before committing: `pnpm run typecheck && pnpm test`
+- No assistant, model, or vendor names in commit messages or committed files.
+- Validate before committing: `pnpm run typecheck && pnpm test`.
+- **Commit always; push by default.** This is a personal GitHub fork (`victor-software-house/sql-seal`) under the user's account. Per the machine baseline (`~/AGENTS.md` git-attribution-policy) the push-default for non-corporate GitHub repos under the user's accounts is ON for finished coherent commits. Do not leave finished work as a local-only commit unless the user explicitly asks you to hold the push.
+- **Push targets `origin` only.** Never push to `upstream` (`h-sphere/sql-seal`); the upstream is read-only here and contributions go through an MR from the fork.
+- **Defer pushing only when** a release lane is mid-flight (Changesets PR open, version-bump merge pending), CI is red on a branch under investigation, or the user names a hold reason. Surface the hold reason in the wrap-up.
 
 ---
 
